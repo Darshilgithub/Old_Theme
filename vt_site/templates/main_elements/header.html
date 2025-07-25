@@ -36,7 +36,12 @@
           <span>Courses</span>
         </a>
       </li>
-
+      <li class="nav-item">
+      <a class="nav-link mx-2" href="{% url 'blog_home' %}">
+        <i class="fas fa-rectangle-list mx-2"></i>
+        <span>Blog</span>
+      </a>
+    </li>
       {% if user.is_authenticated %}
         <!-- For logged-in users, show Dashboard and Profile dropdown -->
         <li class="nav-item">

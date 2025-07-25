@@ -218,6 +218,7 @@ INSTALLED_APPS = [
     'colorfield',
     'video_courses',
     'ide',
+    'blog',
 ]
 
 MIDDLEWARE = [
