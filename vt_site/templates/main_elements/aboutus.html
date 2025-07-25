@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - About Us{% endblock %}
+{% block body_content %}
+
+
+<div class="container mt-4">
+    <div class="row my-5 pb-3">
+        <div class="col-md-6" data-aos="fade-right" data-aos-duration="2000">
+            <h2 class="about_us_title mb-3">Our Mission</h2>
+            <p class="about_us_content px-2">At Vulntech, our unwavering commitment is to shape a safer, more secure
+                digital future for all. We firmly believe that a harmonious fusion of comprehensive education and
+                state-of-the-art technology stands as the cornerstone in safeguarding individuals and organizations from
+                the ever-evolving landscape of cyber threats. Our resolute mission is to equip you with the
+                indispensable knowledge and the most cutting-edge tools, empowering you to rise to the challenge and
+                defend against the complexities of the digital age. In our pursuit of digital safety, we leave no stone
+                unturned, ensuring that you are well-prepared to face and conquer the intricate realm of cybersecurity.
+            </p>
+        </div>
+        <div class="col-md-6 d-flex align-items-center justify-content-center" data-aos="zoom-in"
+            data-aos-duration="2000">
+            <img src="{% static './images/Our_Mission.jpg' %}" alt="Our Mission"
+                class="img-fluid rounded-circle about_us_img">
+        </div>
+    </div>
+</div>
+{% if team %}
+<section class="blog-section">
+    <div class="container">
+        <section class="py-5 py-md-5">
+            <div class="row mb-5">
+                <h2 class="about_us_title mb-3 text-center" data-aos="fade-right" data-aos-duration="2000">Who We Are
+                </h2>
+                <p class="about_us_content px-5" data-aos="fade-right-down" data-aos-duration="3000"
+                    data-aos-delay="100">We are a team of passionate individuals with expertise in cybersecurity, web
+                    development, and UI design. Our combined experience and dedication drive us to develop innovative
+                    solutions and educational resources that empower you to stay one step ahead of digital threats.</p>
+
+                <div data-flickity='{"prevNextButtons": true, "cellAlign": "left", "wrapAround": true, "imagesLoaded": true}'
+                    data-aos="fade-right-down" data-aos-duration="3000" data-aos-delay="400">
+                    {% for member in team %}
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 pt-5 px-3 px-md-4 mb-5">
+                        <div class="card profile rounded shadow">
+                            {% if member.pic %}
+                            <img src="{{member.pic.url}}" alt="Profile_pic"
+                                class="card-img-top rounded-circle mx-auto mt-4">
+                            {% else %}
+                            <img src="{% static './images/icon-profile.png' %}" alt="Profile_pic"
+                                class="card-img-top rounded-circle mx-auto mt-4">
+                            {% endif %}
+                            <div class="card-body text-center">
+                                <h4 class="card-title">{{member.name}}</h4>
+                                <p class="card-text">{{member.role}}</p>
+                                <ul class="list-unstyled list-inline list-social mb-4 mb-md-0">
+
+                                    <li class="list-inline-item list-social-item">
+                                        <a href="{% if member.insta_link %} {{member.insta_link}} {% else %} # {% endif %}"
+                                            class="text-secondary  rounded-circle">
+                                            <i class="bi bi-instagram"></i>
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item list-social-item">
+                                        <a href="{% if member.linkedin_link %} {{member.linkedin_link}} {% else %} # {% endif %}"
+                                            class="text-secondary  rounded-circle">
+                                            <i class="bi bi-linkedin"></i>
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item list-social-item">
+                                        <a href="{% if member.email_id %} mailto:{{member.email_id}} {% else %} # {% endif %}"
+                                            class="text-secondary  rounded-circle">
+                                            <i class="bi bi-envelope"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-footer m-0 p-3">
+                                <h6>Skills</h6>
+                                {% for i in member.teammate_skills_set.all %}
+                                <span class="badge m-1">{{i.skill}}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+{% endif %}
+<div class="container">
+    <div class="row my-5 pt-5">
+        <div class="col-md-6 d-flex align-items-center justify-content-center" data-aos="fade-down-right"
+            data-aos-duration="1000">
+            <img src="{% static './images/what_we_do.jpg' %}" alt="Our Mission" class="img-fluid rounded mb-5"
+                style="transform: skew(5deg);width:45%">
+        </div>
+        <div class="col-md-6" data-aos="fade-up" data-aos-duration="3000">
+            <h2 class="about_us_title mb-3">What We Do</h2>
+            <p class="about_us_content px-2">Vulntech stands as a premier authority in the realm of cybersecurity,
+                offering a comprehensive array of top-tier courses and resources. Our commitment is unwavering as we
+                meticulously craft each offering to educate, train, and equip both individuals and organizations. In an
+                era defined by the relentless evolution of cyber threats, we are dedicated to providing you with the
+                knowledge and tools necessary to fortify your digital defenses. Our pursuit of excellence is mirrored in
+                the broad spectrum of subjects our courses encompass. From laying the foundational principles of
+                cybersecurity to delving into the most advanced and sophisticated penetration testing techniques
+                available, we leave no stone unturned in preparing you for the complex digital landscape.</p>
+            <p class="about_us_content px-2">In our mission to empower, we take pride in offering courses that cater to
+                a multitude of needs and skill levels.</p>
+        </div>
+    </div>
+
+
+    <div class="row py-5">
+        <h2 class="about_us_title mb-5 text-center">Why Choose Vulntech</h2>
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="features" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="10">
+                <div class="feature-icon rounded-circle">
+                    <img src="{% static './images/icon-user.png' %}" alt="instructors">
+                </div>
+                <h4 class="px-2 fw-bold">Expert Instructors</h4>
+                <p class="mt-1">Our courses are created and delivered by industry experts with extensive real-world
+                    experience.</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="features" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">
+                <div class="feature-icon rounded-circle">
+                    <img src="{% static './images/icons-knowledge.png' %}" alt="knowledge">
+                </div>
+                <h4 class="px-2 fw-bold">Cutting-Edge Content</h4>
+                <p class="mt-1">We constantly update our content to reflect the latest cybersecurity trends and threats.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="features" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="300">
+                <div class="feature-icon rounded-circle">
+                    <img src="{% static './images/icon-video_courses.png' %}" alt="learning">
+                </div>
+                <h4 class="px-2 fw-bold">Interactive Learning</h4>
+                <p class="mt-1">Engage with hands-on labs, simulations, and practical exercises to reinforce your
+                    knowledge.</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="features" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">
+                <div class="feature-icon rounded-circle">
+                    <i class="fas fa-headset display-1"></i>
+                </div>
+                <h4 class="px-2 fw-bold">Community Support</h4>
+                <p class="mt-1">Join our vibrant community of learners and professionals who share insights and
+                    experiences.</p>
+            </div>
+        </div>
+
+
+        <p class="about_us_content my-5 px-5">Have questions or want to learn more? Feel free to <a
+                href="{% url 'contact' %}">contact us</a> to get in touch with our team.</p>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

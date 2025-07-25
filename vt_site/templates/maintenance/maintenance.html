@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VulnTech</title>
+    <link rel="icon" type="image/png" href="../images/site_logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax.min.js"></script>
+
+    <script src="https://kit.fontawesome.com/22c0aad4ed.js" crossorigin="anonymous"></script>
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+            cursor: default !important;
+        }
+    </style>
+</head>
+
+<body style="background-color: var(--text-color-1);">
+    <div class="d-flex align-items-center justify-content-center" style="flex-direction: column;text-align:center">
+        <img src="{% static './images/construction.jpg' %}" alt="construction" class="img-fluid mt-5"
+            style="width: 30em;">
+        <h2 class="mx-4 fw-bold text-dark display-5">Site is Under Maintenance</h2>
+        <p class="mt-2 text-dark">This website is still under construction. Stay tuned! The entire site will be
+            available soon.</p>
+        <a href="{% url 'index' %}" class="btn btn-warning"> Go to Home</a>
+    </div>
+</body>
+
+</html>

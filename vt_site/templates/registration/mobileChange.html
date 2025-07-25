@@ -1,0 +1,95 @@
+{% extends 'registration/settings.html' %}
+{% load static %}
+{% block title %} - Mobile Change{% endblock %}
+{% block content %}
+<a href="{% url 'settings' %}" class="nav-link">
+    <i class="fa-solid fa-chevron-left mx-4 my-5 d-lg-none d-block"></i>
+</a>
+<div class="my-0 my-lg-5 mx-5 pt-lg-3 pt-0 account_box">
+    <h2 class="mb-3">Change Mobile Number</h2>
+    <p class="fs-6 text-white-50">Update your mobile number with ease here. Your new number will help you stay connected
+        securely.</p>
+    <form method="post" id="mobile_change_form">
+        {% csrf_token %}
+
+
+        <div class="my-5 w-md-50 w-100">
+            <label for="id_mobile" class="form-label">
+                <i class="fas fa-phone text-info me-2"></i>
+                {{form.mobile.label}}
+            </label>
+            {{form.mobile}}
+            <h6 class="text-danger input-warning mt-2" style="display: none;">Please enter only numbers in the mobile
+                field</h6>
+        </div>
+
+        <button class="btn btn-primary my-3"style="color: var(--text-color-black);">Update Number</button>
+    </form>
+    {% if messages %}
+    {% for message in messages %}
+    <div id="message_toast"
+        class="toast align-items-center {% if message.tags == 'error' %} text-bg-danger {% elif message.tags == 'success' %} text-bg-success {% else %} text-bg-secondary {% endif %} border-0 position-absolute"
+        role="alert" aria-live="assertive" aria-atomic="true" style="top: 0%;left: 50%;transform: translate(-50%);">
+        <div class="d-flex align-items-center">
+            <div class="toast-body ">
+                <i
+                    class="bi {% if message.level == 'error' %} bi-exclamation-circle-fill {% elif message.tags == 'success' %} bi-check-circle-fill {% endif %} mx-2"></i>
+                <span>{{ message }}</span>
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto bg-transparent" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block internal_script%}
+
+<script>
+    const sidebar = document.querySelector('.settings_box_sidebar');
+    if ($(window).width() <= 991) {
+        sidebar.style.display = 'none';
+    }
+    const toast = document.getElementById('message_toast');
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toast);
+    $(document).ready(function () {
+        if (toast) toastBootstrap.show()
+    })
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const input = document.getElementById("id_mobile");
+        const warning_msg = document.querySelector('.input-warning');
+        let valid_form = true;
+
+        const iti = window.intlTelInput(input, {
+            initialCountry: "{{countryCode}}",
+            utilsScript: "../static/js/script.js?1695806485509"
+        });
+
+
+        input.addEventListener('input', function () {
+            if (!/^[+\d]\d*$/.test(input.value)) {
+                input.classList.add('warning');
+                warning_msg.style.display = "block";
+                valid_form = false;
+            }
+            else {
+                input.classList.remove('warning');
+                warning_msg.style.display = "none";
+                valid_form = true;
+            }
+        });
+
+        document.getElementById('mobile_change_form').onsubmit = () => {
+            const fullPhoneNumber = iti.getNumber();
+            input.value = fullPhoneNumber;
+
+            if (!valid_form) {
+                event.preventDefault();
+            }
+        }
+    });    
+</script>
+{% endblock %}

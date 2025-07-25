@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - Contact Us{% endblock %}
+{% block body_content %}
+
+<div class="container">
+  <div class="row mt-5 mb-4 p-0 contact_us_page">
+    <div class="col-md-6 p-0 m-0">
+      <iframe class="w-100" data-aos="zoom-in-right" data-aos-duration="2000" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d228290.5346556513!2d72.7240023294761!3d19.08899510432833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c6306644edc1%3A0x5da4ed8f8d648c69!2sMumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1697883193811!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div class="col-md-6">
+      <div class="p-3">
+        <h2 class="mb-sm-3 mb-5 contact_us_title">Contact Us</h2>
+        <form class="w-100 needs-validation" method="post">
+          {% csrf_token %}
+          <div class="my-4">
+            <input type="text" class="form-control border-0 shadow-none" name="name" placeholder="Enter your name">
+          </div>
+          <div class="mb-4">
+            <input type="text" class="form-control border-0 shadow-none" name="subject" placeholder="Enter Subject of the content">
+          </div>
+          <div class="mb-4">
+            <textarea class="form-control border-0 shadow-none" name="content" rows="6" placeholder="Enter message"></textarea>
+          </div>
+          <button class="btn btn-info w-100 mt-sm-4 mt-3" type="submit">Send</button>
+        </form>
+        {% if messages %}
+          {% for message in messages %}
+            <div id="message_toast" class="toast align-items-center {% if message.tags == 'error' %}text-bg-danger{% elif message.tags == 'success' %}text-bg-success{% else %}text-bg-secondary{% endif %} border-0 position-absolute" role="alert" aria-live="assertive" aria-atomic="true" style="top: -5%; left: 50%; transform: translate(-50%);">
+              <div class="d-flex align-items-center">
+                <div class="toast-body">
+                  <i class="bi {% if message.level == 'error' %}bi-exclamation-circle-fill{% elif message.tags == 'success' %}bi-check-circle-fill{% endif %} mx-2"></i>
+                  <span>{{ message|escape }}</span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto bg-transparent" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  
+  <div class="row mb-5">
+    <div class="col-md-4 col-12 mb-3">
+      <div class="p-3 conatct_us_info" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="1000" data-aos-delay="100">
+        <div class="d-flex align-items-center justify-content-center">
+          <div class="rounded-circle contact_us_icon">
+            <i class="fas fa-location-dot"></i>
+          </div>
+          <h3 class="mx-3 fw-bold">Location</h3>
+        </div>
+        <h6 class="text-center mt-3">Mumbai, Maharastra, India</h6>
+      </div>
+    </div>
+
+    <div class="col-md-4 col-12 mb-3">
+      <div class="p-3 conatct_us_info" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="1000" data-aos-delay="300">
+        <div class="d-flex align-items-center justify-content-center">
+          <div class="rounded-circle contact_us_icon">
+            <i class="fas fa-phone"></i>
+          </div>
+          <h3 class="mx-3 fw-bold">Mobile</h3>
+        </div>
+        <h6 class="text-center mt-3">+91 72084 63042</h6>
+        <h6 class="text-center mt-3">+91 92352 82224</h6>
+      </div>
+    </div>
+
+    <div class="col-md-4 col-12 mb-3">
+      <div class="p-3 conatct_us_info" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="1000" data-aos-delay="500">
+        <div class="d-flex align-items-center justify-content-center">
+          <div class="rounded-circle contact_us_icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <h3 class="mx-3 fw-bold">Mail</h3>
+        </div>
+        <h6 class="text-center mt-3">support@vulnix.org</h6>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block internal_script %}
+  <script>
+    const toast = document.getElementById('message_toast');
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toast);
+    $(document).ready(function(){
+      if (toast) toastBootstrap.show();
+    });
+  </script>
+{% endblock %}

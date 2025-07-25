@@ -1,0 +1,300 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block internal_style %}
+<style>
+  /* Custom gap class for feature boxes */
+  .custom-gap {
+    gap: 4rem;  
+  }
+  
+  .features-title {
+    margin-bottom: 3rem;
+  }
+  
+  /* Video container styling */
+  .video-section {
+      flex: 1;
+      max-width: 100%;
+      position: relative;
+  }
+  .video-section iframe, .video-section video {
+      width: 100%;
+      height: 100%;
+      /* Removed fixed aspect-ratio to preserve natural ratio */
+      object-fit: contain;
+      border: none;
+  }
+  
+  /* List styling */
+  .section-item,
+  .section-item:hover {
+      background-color: var(--bg-color-3);
+  }
+  .chapter-list .chapter-item.section-item {
+      background-color: var(--bg-color-2) !important;
+      border-bottom: 1px solid var(--bg-color-1) !important;
+  }
+  @media (max-width: 768px) {
+      .video-section {
+          padding: 10px;
+      }
+  }
+  
+  /* Hide built-in download button (Chrome & some browsers) */
+  video::-internal-media-controls-download-button {
+      display: none;
+  }
+  video::-webkit-media-controls-enclosure {
+      overflow: hidden;
+  }
+  
+  /* Disable text selection */
+  body, video {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+  }
+</style>
+{% endblock %}
+
+{% block body_content %}
+  {% if messages %}
+    {% for message in messages %}
+      <div id="message_toast"
+           class="toast align-items-center {% if message.tags == 'error' %}text-bg-danger{% elif message.tags == 'success' %}text-bg-success{% endif %} border-0 position-absolute"
+           role="alert" aria-live="assertive" aria-atomic="true"
+           style="top: 12%; left: 50%; transform: translate(-50%);">
+        <div class="d-flex align-items-center">
+          <div class="toast-body">
+            <i class="bi {% if message.level == 'error' %}bi-exclamation-circle-fill{% elif message.tags == 'success' %}bi-check-circle-fill{% endif %} mx-2"></i>
+            <span>{{ message }}</span>
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto bg-transparent" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- Banner Section -->
+  <section class="banner-section">
+    <div class="container">
+      <div class="row align-items-center">
+        {% for i in siteDetail %}
+          <div class="col-12 col-md-6 banner-text" data-aos="fade-down-right" data-aos-duration="2000">
+            {% with words=i.split_text %}
+              <h1>{{ words|slice:':2'|join:' ' }}<span>{{ words|slice:'2:'|join:' ' }}</span></h1>
+              {% if i.home_page_desc %}
+                <p>{{ i.home_page_desc }}</p>
+              {% endif %}
+            {% endwith %}
+            <a href="{% url 'courses' %}" class="btn d-inline-flex filled-button mt-4" style="color: #161616;border-radius: 10px;border: 1px solid #161616;">Explore Now</a>
+          </div>
+
+          <div class="col-12 col-md-6 banner-img" data-aos="fade-left" data-aos-duration="2000">
+            <div class="circle-animation">
+              {% if i.circle_animation_image_1 %}
+                <div class="inner-circle" style="--i:0;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img src="{{ i.circle_animation_image_1.url }}" alt="python" />
+                  </div>
+                </div>
+              {% else %}
+                <div class="inner-circle" style="--i:0;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img src="{% static 'images/default-circle.png' %}" alt="default" />
+                  </div>
+                </div>
+              {% endif %}
+              {% if i.circle_animation_image_2 %}
+                <div class="inner-circle" style="--i:1;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img src="{{ i.circle_animation_image_2.url }}" alt="linux" />
+                  </div>
+                </div>
+              {% else %}
+                <div class="inner-circle" style="--i:1;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img src="{% static 'images/default-circle.png' %}" alt="default" />
+                  </div>
+                </div>
+              {% endif %}
+              {% if i.circle_animation_image_3 %}
+                <div class="inner-circle" style="--i:2;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img src="{{ i.circle_animation_image_3.url }}" alt="web" />
+                  </div>
+                </div>
+              {% else %}
+                <div class="inner-circle" style="--i:2;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img src="{% static 'images/default-circle.png' %}" alt="default" />
+                  </div>
+                </div>
+              {% endif %}
+              {% if i.circle_animation_image_4 %}
+                <div class="inner-circle" style="--i:3;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img src="{{ i.circle_animation_image_4.url }}" alt="java" />
+                  </div>
+                </div>
+              {% else %}
+                <div class="inner-circle" style="--i:3;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img src="{% static 'images/default-circle.png' %}" alt="default" />
+                  </div>
+                </div>
+              {% endif %}
+              {% if i.circle_animation_image_5 %}
+                <div class="inner-circle" style="--i:4;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img src="{{ i.circle_animation_image_5.url }}" alt="wireshark" />
+                  </div>
+                </div>
+              {% else %}
+                <div class="inner-circle" style="--i:4;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img src="{% static 'images/default-circle.png' %}" alt="default" />
+                  </div>
+                </div>
+              {% endif %}
+              {% if i.circle_animation_image_6 %}
+                <div class="inner-circle" style="--i:5;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img src="{{ i.circle_animation_image_6.url }}" alt="hacking" />
+                  </div>
+                </div>
+              {% else %}
+                <div class="inner-circle" style="--i:5;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img src="{% static 'images/default-circle.png' %}" alt="default" />
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+            <div class="position-relative">
+              <div class="floor"></div>
+              <div class="d-flex justify-content-center align-items-center">
+                <img src="{% static 'images/learner-2.png' %}" alt="learner" />
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section with custom gap -->
+  <div class="container">
+    <div class="row py-5">
+      <h2 class="features-title">Key Features</h2>
+      <div class="d-sm-flex align-items-center justify-content-center custom-gap">
+        <div class="features" data-aos="zoom-in-right">
+          <div class="feature-icon rounded-circle">
+            <img src="{% static 'images/icon-video_courses.png' %}" alt="video_courses" />
+          </div>
+          <h4 class="px-2 fw-bold">Learn Anything</h4>
+          <p class="mt-1">Unlock limitless knowledge with our diverse courses</p>
+        </div>
+      
+        <div class="features" data-aos="zoom-in">
+          <div class="feature-icon rounded-circle">
+            <img src="{% static 'images/icons-knowledge.png' %}" alt="knowledge" />
+          </div>
+          <h4 class="px-2 fw-bold">Gain Knowledge</h4>
+          <p class="mt-1">Expand Your Horizons: Embrace Knowledge Today</p>
+        </div>
+      
+        <div class="features" data-aos="zoom-in-up">
+          <div class="feature-icon rounded-circle">
+            <img src="{% static 'images/icon-coins.png' %}" alt="coins" />
+          </div>
+          <h4 class="px-2 fw-bold">Earn Credits</h4>
+          <p class="mt-1">Unlock Your Path to Success: Earn Credits Today!</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row pt-5 mt-3">
+      <h2 class="blogs-title" data-aos="fade-right" data-aos-duration="2000">Top Most Categories</h2>
+      {% for i in coursesCategory %}
+      <div class="col-12 col-md-6 col-lg-4 py-5 px-3 px-md-4">
+        <div class="category-content card border-0 rounded mb-5 text-white text-decoration-none shadow p-0 lift sk-fade" style="background-color: var(--sec-bg);">
+          <a href="#" data-tab-target="pills-cate-{{ i.id }}-tab" class="nav-link course-link">
+            {% if i.image %}
+              <img src="{{ i.image.url }}" alt="{{ i.name }}" class="img w-100 rounded" style="aspect-ratio: 4/2; object-fit: fill; height: 13em;" />
+            {% else %}
+              <img src="{% static 'images/default-image.png' %}" alt="default" class="img w-100 rounded" />
+            {% endif %}
+          </a>
+          <div class="card-body" style="background-color: var(--sec-bg);">
+            <a href="#" data-tab-target="pills-cate-{{ i.id }}-tab" class="nav-link course-link">
+              <h5 class="card-title category-title mt-2" style="font-size: 1.3em; letter-spacing: 1px; color: var(--text-color-3); font-family: Verdana, Geneva, Tahoma, sans-serif;">{{ i.name }}</h5>
+            </a>
+            <div class="d-flex align-items-center justify-content-between mt-4">
+              <div class="d-sm-flex align-items-center mt-0 gap-3">
+                {% with num_courses=i.courses_set.all|length %}
+                  <div class="badge text-bg-secondary p-2">{{ num_courses }} courses</div>
+                {% endwith %}
+              </div>
+              <div>
+                <a class="dropdown-item py-1 px-3 btn bg-transparent d-flex align-items-center nav-link course-link" type="button" href="{% url 'courses' %}" style="border-radius: 0.7em; font-size: 1em; border: 2px solid var(--text-color-2);">
+                  <span class="mx-2 text-white">View</span>
+                  <i class="fa-solid fa-chevron-right ms-auto" style="color: var(--text-color-1);"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block internal_script %}
+<script>
+// Disable common developer shortcuts (F12, Ctrl+Shift+I, etc.)
+document.addEventListener('keydown', function (e) {
+    if (e.keyCode === 123 ||
+        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) ||
+        (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83))) {
+        e.preventDefault();
+    }
+});
+// Disable right-click on entire document
+document.addEventListener("contextmenu", function(e) {
+    e.preventDefault();
+});
+// Functions for toggling next sections
+function showNextSections() {
+    document.getElementById('next-sections').style.display = 'block';
+}
+function toggle(sectionwrap) {
+    const chapterList = sectionwrap.querySelector('.chapter-list');
+    const arrowIcon = sectionwrap.querySelector('.arrow-icon');
+    if (chapterList.style.display === 'none' || chapterList.style.display === '') {
+        chapterList.style.display = 'block';
+        arrowIcon.style.transform = 'rotate(180deg)';
+    } else {
+        chapterList.style.display = 'none';
+        arrowIcon.style.transform = 'rotate(0deg)';
+    }
+}
+document.addEventListener("DOMContentLoaded", function () {
+    const video = document.getElementById("videoPlayer");
+    if (video) {
+        video.addEventListener("loadedmetadata", function () {
+            video.currentTime = 0.1;
+        });
+        video.addEventListener("error", function () {
+            console.error("Video failed to load.");
+        });
+    }
+});
+</script>
+{% endblock %}
+

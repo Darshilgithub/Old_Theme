@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - Profile{% endblock %}
+{% block body_content %}
+
+<div class="container vh-100">
+    <div class="row py-5">
+        {% if user.pic %}
+            <img src="{{ user.pic.url|escape }}" alt="user" class="img rounded-circle mx-auto" data-aos="zoom-in"
+                 data-aos-duration="1000" style="width: 30vw; height: 30vw; aspect-ratio: 1/1; object-fit: cover;">
+        {% else %}
+            <img src="{% static 'images/icon-user.png' %}" alt="user" class="w-25 img rounded-circle mx-auto"
+                 data-aos="zoom-in" data-aos-duration="1000">
+        {% endif %}
+        <h2 class="fw-bold py-1" style="text-align: center;">{{ user.username|escape }}</h2>
+        <hr>
+        <ul class="navbar-nav pb-3 w-100 w-sm-50 mx-auto">
+            <li class="px-3 py-2">
+                <a class="dropdown-item py-2 px-3" href="{% url 'view_profile' %}">
+                    <div class="dropdown-icon"><i class="fas fa-id-badge"></i></div>
+                    <span class="mx-2">View Profile</span>
+                    <i class="fa-solid fa-chevron-right ms-auto"></i>
+                </a>
+            </li>
+            <li class="px-3 py-2">
+                <a class="dropdown-item py-2 px-3" href="{% url 'edit_profile' %}">
+                    <div class="dropdown-icon"><i class="fas fa-user-pen"></i></div>
+                    <span class="mx-2">Edit Profile</span>
+                    <i class="fa-solid fa-chevron-right ms-auto"></i>
+                </a>
+            </li>
+            <li class="px-3 py-2">
+                <a class="dropdown-item py-2 px-3" href="{% url 'settings' %}">
+                    <div class="dropdown-icon"><i class="fas fa-gear"></i></div>
+                    <span class="mx-2">Settings</span>
+                    <i class="fa-solid fa-chevron-right ms-auto"></i>
+                </a>
+            </li>
+            <li class="px-3 py-2">
+                <a class="dropdown-item py-2 px-3" href="{% url 'logout' %}">
+                    <div class="dropdown-icon"><i class="fas fa-right-from-bracket"></i></div>
+                    <span class="mx-2">Logout</span>
+                    <i class="fa-solid fa-chevron-right ms-auto"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VulnTech - 404 Page</title>
+  <link rel="icon" type="image/png" href="{% static './images/site_logo.png' %}">
+  <link rel="stylesheet" href="{% static './css/bootstrap.min.css' %}">  
+  <link rel="stylesheet" href="{% static './css/style.css' %}">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 d-flex align-items-center justify-content-center" style="flex-direction: column;">
+        <h2 class="mt-5 fs-1 text-info blog-post-title text-center">Oops! Page not Found</h2>
+        <img src="{% static './images/404.png' %}" alt="404" class="img-fluid rounded mx-auto" style="width: 25em;">
+        <p class="w-md-50 w-100 text-center my-3">Unfortunately, the page you're searching for seems to have slipped away.</p>
+        <a href="{% url 'index' %}" rel="noreferrer noopener" class="btn btn-warning px-4 mt-3">Go to Home</a>
+      </div>
+    </div>
+  </div>
+  
+  
+    <script src="https://kit.fontawesome.com/22c0aad4ed.js" crossorigin="anonymous"></script>
+    <script src="{% static './js/jquery.min.js' %}"></script>
+</body>
+</html>

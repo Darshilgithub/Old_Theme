@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - {{ terms.name }}{% endblock %}
+{% block body_content %}
+    <div class="container py-5">
+        <div class="row justify-content-center mb-5 blog_post-content px-5 py-3">
+            <div class="text-center my-3 mb-md-5">
+                <h2 class="mb-5 blog-post-title" style="font-size: 3em;" data-aos="fade-right" data-aos-duration="1000">{{ terms.name }}</h2>
+                <p class="text-capitalize my-3 w-md-75 w-100" style="text-align: center;">{{ terms.description }}</p>
+            </div>
+            <div class="py-3 post-content px-5 mx-5">
+                {{ terms.content|safe }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

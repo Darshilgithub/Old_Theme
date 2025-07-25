@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - {{ course.title }} | Payment Failed {% endblock %}
+
+{% block body_content %}
+<div class="container text-center my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <i class="fa fa-times-circle text-danger mb-4" style="font-size: 80px;"></i> 
+            <h1 class="text-danger font-weight-bold">Payment Failed</h1>
+            <p class="h4 text-secondary mt-3">We were unable to process your payment</p>
+            <p class="lead text-muted text-white">Please try again or contact support if the issue persists.</p>
+            <a href="{% url 'courses' %}" class="btn btn-primary btn-lg mt-4">Return to Courses</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

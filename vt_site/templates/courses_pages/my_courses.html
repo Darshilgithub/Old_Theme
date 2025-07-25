@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - My_Courses{% endblock %}
+{% block internal_style %}
+<style>
+  body {
+    scrollbar-width: none;
+  }
+  .sort-options {
+    background-color: #a371d9;
+    box-shadow: none;
+  }
+  .accordion-button {
+      box-shadow: none;
+      border-bottom: none;
+      background-color: var(--bg-color-1);
+      color: var(--text-color-1);
+  }
+  
+  .accordion-button:focus, .accordion-button:not(.collapsed) {
+      box-shadow: none;
+      border-bottom: none;
+  }
+  
+  .pagination .page-link {
+    background-color: var(--bg-color-3); 
+    color: var(--text-color-1);
+    padding: 8px 16px;
+    border: 1px solid var(--text-color-3);
+  }
+  
+  .pagination .page-link:hover {
+    background-color: var(--text-color-2); 
+    color: var(--bg-color-1);
+  }
+  
+  .pagination .page-item.active .page-link {
+    background-color: var(--text-color-2); 
+    color: var(--bg-color-1);             
+    border: none;                          
+  }
+  
+  .pagination .page-link:focus {
+    box-shadow: none;
+  }
+  
+  .accordion-item {
+      box-shadow: none;
+  }
+  .accordion-body {
+      background-color: #a371d9 !important;
+      color: var(--text-color-1) !important;
+      box-shadow: none !important;
+  }
+  
+  .checkbox-options .form-check {
+      background-color: #a371d9 !important;
+      
+  }
+  
+  .checkbox-options .form-check:hover {
+      background-color: #8f62bf !important;
+  }
+  
+  .accordion-item {
+      border: none;
+  }
+  
+  .filter-section-button {
+    height: 2rem;
+    font-size: 14px;
+}
+.filter-section-button {
+        margin-right: 5px;
+    }
+
+    #courseGrid .card {
+    transition: transform 0.2s;
+    border-radius: 10px;
+    width: 300px
+}
+
+.course-card {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.card-body {
+    background-color: #2a1d38;
+    border-radius: 0 0 10px 10px;
+}
+
+.card-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.text-light {
+    color: #ffffff !important;
+    font-weight: 250;
+}
+
+.fw-bold {
+    font-weight: 600;
+}
+
+
+.color-set {
+  color: var(--text-color-2);
+}
+
+.search-container {
+    width: 100%;
+    padding: 12px 0;
+    display: flex;
+    justify-content: center;
+}
+
+form {
+    width: 95%;
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-color-3);
+    
+    border-radius: 2px;
+    padding: 10px 20px;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 2px 20px;
+    border: none;
+    font-size: 1.2rem;
+    outline: none;
+    color: #e3c9ff;
+    background-color: transparent;
+}
+
+input[type="text"]::placeholder {
+    color: #e3c9ff;
+    font-weight: 100;
+}
+
+.search-icon {
+    color: var(--icon-color);
+    margin-right: 10px;
+}
+input[type="text"]:focus {
+    border: #ced4da;
+}
+form:focus-within {
+  border: 2px solid #433156;
+}
+.search-icon {
+  font-size: 1rem;
+}
+
+
+  </style>
+  {% endblock %}
+{% block body_content %}
+
+<div class="search-container">
+  <form>
+    <span class="material-symbols-outlined search-icon">
+      search
+      </span>
+      <input type="text" id="searchInput" placeholder="Search" onkeyup="searchCourses()">
+  </form>
+</div>
+
+
+    
+    <div class="container">
+        <div class="row">
+
+            <div class="col-xl-12">
+              <div class="row" id="courseGrid">
+                  {% for i in purchased_courses %}
+                  <div class="col-lg-4 col-sm-6 mb-4 course-card" data-course-name="{{ i.title | lower }}">
+                      <div class="card border-0 text-decoration-none" style="background-color: #2f263a;">
+                          <img src="{{ i.thumbline_image.url }}" alt="Course Image" class="card-img-top rounded" style="height: 200px; object-fit: cover;">
+                          <div class="card-body">
+                              <div class="d-flex justify-content-between align-items-center mb-2">
+                                  
+                                  <div class="d-flex align-items-center justify-content-end ms-auto" style="color: var(--text-color-2);">
+                                    <i class="fa fa-signal me-1" aria-hidden="true"></i>
+                                      <span class="fw-bold">{{ i.level }}</span>
+                                  </div>
+                              </div>
+                              <h5 class="card-title text-white">{{ i.title }}</h5>
+                              <p class="text-light" style="margin-bottom: 0;">Category: <span class="fw-bold text-secondary">{{ i.category }}</span></p>
+                              <a class="btn btn-info mt-3 w-100" href="{{ i.get_absolute_url }}">Play Now</a>
+                          </div>
+                      </div>
+                  </div>
+                  {% endfor %}
+              </div>
+          
+              <nav aria-label="pagination-section">
+                  <ul class="pagination d-flex justify-content-center center">
+                      <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                      <li class="page-item"><a class="page-link" href="#">2</a></li>
+                      <li class="page-item"><a class="page-link" href="#">...</a></li>
+                      <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                  </ul>
+              </nav>
+          </div>
+          
+        </div>
+    </div>
+
+  
+{% endblock %}
+{% block internal_script %}
+    
+    <script type="text/javascript">
+        function searchCourses() {
+            let input = document.getElementById("searchInput").value;
+            let filter = input.toLowerCase();
+            let courseCards = document.querySelectorAll(".course-card");
+
+            courseCards.forEach(function(courseCard) {
+            let courseName = courseCard.getAttribute("data-course-name");
+            if (courseName.includes(filter)) {
+                courseCard.style.display = "";  
+            } else {
+                courseCard.style.display = "none";  
+            }
+            });
+        }
+          
+
+
+        function getCourses(tot, slide, len){
+          function totslides(first, last){
+            return Array.from(Array(last - first + 1), (_, i) => i + first);
+          }
+        
+          var swid = len < 9 ? 1 : 2;
+          var lwid = (len - swid * 2 - 3) >> 1;
+          var rwid = (len - swid * 2 - 3) >> 1;
+        
+          if(tot <= len){
+            return totslides(1, tot);
+          }
+        
+          if(slide <= len - swid - 1 - rwid){
+            return totslides(1, len - swid - 1).concat(0, totslides(tot - swid + 1, tot));
+          }
+        
+          if(slide >= tot - swid - 1 - rwid){
+            return totslides(1, swid).concat(0, totslides(tot- swid - 1 - rwid - lwid, tot));
+          }
+        
+          return totslides(1, swid).concat(0, totslides(slide - lwid, slide + rwid), 0, totslides(tot - swid + 1, tot));
+        }
+        
+        $(function(){
+          var totItems = $("#courseGrid .card").length;
+          var NumCourses = 9; 
+          var tot = Math.ceil(totItems / NumCourses);
+          var pagSize = 5; 
+          var curr;
+        
+          function showSlide(curSlide){
+            var hasScrolled = false;
+            if(curSlide < 1 || curSlide > tot) return false;
+        
+            curr = curSlide;
+        
+            $("#courseGrid .card").hide().slice((curr - 1) * NumCourses, curr * NumCourses).show();
+            
+            var scrolledKey = 'hasScrolled';
+            var hasScrolled = sessionStorage.getItem(scrolledKey);
+
+            function scrollToTop() {
+                $("html, body").animate({ scrollTop: $("#courseGrid").offset().top }, 100);
+            }
+            
+            if (!hasScrolled) {
+                sessionStorage.setItem(scrolledKey, true);
+                window.onbeforeunload = function() {
+                scrollToTop();
+                };
+            }
+
+            $("#pagination li").slice(1, -1).remove();
+        
+            getCourses(tot, curr, pagSize).forEach(item => {
+              $("<li>").addClass("page-item").addClass(item ? "current-page" : "dots")
+              .toggleClass("active", item === curr).append($("<a>").addClass("page-link")
+              .attr({href: "javascript:void(0)"}).text(item || "...").on("click", function(){showSlide(item);})).insertBefore(".next-slide");
+            });
+        
+            $(".prev-slide").toggleClass("disable", curr === 1);
+            $(".next-slide").toggleClass("disable", curr === tot);
+            return true;
+          }
+        
+          $("#pagination").append(
+            $("<li>").addClass("page-item").addClass("prev-slide").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).append($("<span>").attr("aria-hidden","true").text("<<<"))),
+            $("<li>").addClass("page-item").addClass("next-slide").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).append($("<span>").attr("aria-hidden","true").text(">>>")))
+          );
+        
+          $("#courseGrid").show();
+          showSlide(1);
+        
+          $(document).on("click", "#pagination li.current-slide:not(.active)", function(){
+            return showSlide(+$(this).text());
+          });
+        
+          $(".next-slide").on("click", function(){
+            return showSlide(curr + 1);
+          });
+        
+          $(".prev-slide").on("click", function(){
+            return showSlide(curr - 1);
+          });
+        });
+        </script>
+              
+{% endblock %}

@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} – {{ course.title }} IDE {% endblock %}
+
+{% block internal_style %}
+  
+<style>
+    html, body,
+    .editor-container,
+    textarea,
+    #editor,
+    #output pre {
+        scroll-behavior: smooth;
+    }
+
+    .editor-container {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 100px);
+        border-radius: 12px;
+    }
+    
+    #editor {
+        flex: 1;
+        width: 100%;
+        border: none;
+        background-color: var(--box-color);
+        font-family: monospace;
+        font-size: 14px;
+        color: var(--text-color-1);
+    }
+    
+    textarea, #output {
+        background-color: var(--box-color);
+        color: var(--text-color-1);
+        border: 1px solid var(--line-color);
+        border-radius: 8px;
+        scrollbar-width: thin;
+        scrollbar-color: #666 #222;
+    }
+    
+    #input_data {
+        resize: vertical;
+    }
+    
+    #output {
+        box-sizing: border-box;
+        scrollbar-width: thin;
+        scrollbar-color: #666 #222;
+        height: calc(20vh - 100px);
+    }
+    #editor {
+        scrollbar-width: thin;
+        scrollbar-color: #666 #222;
+    }
+    
+    #output::-webkit-scrollbar,
+    textarea::-webkit-scrollbar,
+    #editor::-webkit-scrollbar {
+        width: 5px;
+    }
+    
+    #output::-webkit-scrollbar-track,
+    textarea::-webkit-scrollbar-track,
+    #editor::-webkit-scrollbar-track {
+        background: var(--box-color);
+        border-radius: 5px;
+    }
+    
+    #output::-webkit-scrollbar-thumb,
+    textarea::-webkit-scrollbar-thumb,
+    #editor::-webkit-scrollbar-thumb {
+        background-color: var(--line-color);
+        border-radius: 5px;
+        border: 2px solid var(--box-color);
+    }
+    #output::-webkit-scrollbar-thumb:hover,
+    textarea::-webkit-scrollbar-thumb:hover,
+    #editor::-webkit-scrollbar-thumb:hover {
+        background-color: var(--text-color-2);
+    }
+    
+    
+    
+    /* Responsive behavior */
+    @media (max-width: 992px) {
+        .codeEditor {
+            height: calc(100vh - 250px)
+        }
+        #output {
+            height: 10vh !important;
+            margin-bottom: 10vh;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .editor-container {
+            height: 100%;
+            margin-bottom: 10vh;
+        }
+        .codeEditor {
+            height: calc(70vh - 100px)
+        }
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.40.0/ace.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.40.0/ext-language_tools.min.js" crossorigin="anonymous"></script>
+
+{% endblock %}
+
+{% block body_content %}
+<main class="container-fluid">
+    <form id="editor-form" method="post" class="editor-container p-0 mb-2">
+        {% csrf_token %}
+        <div class="d-flex my-3 align-items-center px-3">
+            <h2 class="m-0">VulnTech Compiler</h2>
+            <div class="d-flex ms-auto">
+                <div class="form-group me-3">
+                    <select name="language" id="language" class="form-select bg-dark text-light">
+                        <option value="python" {% if language == 'python' %}selected{% endif %}>Python</option>
+                        <option value="javascript" {% if language == 'javascript' %}selected{% endif %}>JavaScript</option>
+                        <option value="c" {% if language == 'c' %}selected{% endif %}>C</option>
+                        <option value="cpp" {% if language == 'cpp' %}selected{% endif %}>C++</option>
+                        <option value="java" {% if language == 'java' %}selected{% endif %}>Java</option>
+                        <option value="go" {% if language == 'go' %}selected{% endif %}>Go</option>
+                        <option value="swift" {% if language == 'swift' %}selected{% endif %}>Swift</option>
+                    </select>
+                </div>
+                <button id="run-button" class="ms-auto btn btn-info px-4 d-flex align-items-center justify-content-center gap-2" type="button">
+                    <span class="run-text">▶ Run</span>
+                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                </button>
+                
+            </div>
+        </div>
+
+        <div class="row flex-grow-1 editor-grid w-100 p-0 m-0">
+            <div class="col-md-8 d-flex flex-column p-0 codeEditor">
+                <textarea class="overflow-auto" id="code" name="code" hidden>{{ code|default:base_code }}</textarea>
+                <div id="editor">{{ code|default:base_code }}</div>
+            </div>
+
+            <div class="col-md-4 d-flex flex-column" style="height: 100%;">
+                <div class="d-flex flex-column h-100">
+                    <label for="input_data" class="mb-1 text-light"><strong class="fs-5">🔹 Input</strong></label>
+                    <textarea class="p-3 h-100 overflow-auto" name="input_data" id="input_data" rows="5" placeholder="Enter inputs to program here">{{ input_data|default:"" }}</textarea>
+                </div>
+                <div class="d-flex flex-column h-100">
+                    <label for="output" class="mt-3 mb-1 text-light"><strong class="fs-5">🔸 Output</strong></label>
+                    <div id="output" class="overflow-auto flex-grow-1">
+                        <pre class="p-3 m-0 text-white">{% if output %}{{ output }} {% else %} // Your output will appear here {% endif %}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</main>
+  
+{% endblock %}
+
+{% block internal_script %}
+<script>
+    ace.config.set("basePath", "https://cdnjs.cloudflare.com/ajax/libs/ace/1.40.0/");
+    const editor = ace.edit("editor");
+    editor.resize();
+    editor.setTheme("ace/theme/monokai");
+    editor.setOptions({ enableBasicAutocompletion: true, enableLiveAutocompletion: true });
+
+    const textarea = document.getElementById("code");
+    const langSelector = document.getElementById("language");
+
+    function setEditorMode(lang) {
+        let modeMap = {
+            'python': 'python',
+            'javascript': 'javascript',
+            'c': 'c',
+            'cpp': 'c_cpp',
+            'java': 'java',
+            'go': 'golang',
+            'swift': 'swift',
+        };
+        editor.session.setMode("ace/mode/" + (modeMap[lang] || 'text'));
+    }
+
+    function updateEditorContent(lang) {
+        const baseCodeMap = {
+            'python': 'print("Hello, World!")',
+            'javascript': 'console.log("Hello, World!");',
+            'c': '#include <stdio.h>\n\nint main() {\n    printf("Hello, World!");\n    return 0;\n}',
+            'cpp': '#include <iostream>\n\nint main() {\n    std::cout << "Hello, World!";\n    return 0;\n}',
+            'java': 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}',
+            'go': 'package main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello, World!")\n}',
+            'swift': 'import Foundation\n\nprint("Hello, World!")'
+        };
+        const baseCode = baseCodeMap[lang] || "// Base code not available for this language";
+        editor.setValue(baseCode, -1);  
+        textarea.value = baseCode; 
+    }
+
+    editor.getSession().on("change", function () {
+        textarea.value = editor.getValue();
+    });
+    textarea.value = editor.getValue();
+
+    setEditorMode(langSelector.value);
+    langSelector.addEventListener('change', () => {
+        setEditorMode(langSelector.value);
+    });
+
+    langSelector.addEventListener('change', () => {
+        setEditorMode(langSelector.value);
+        updateEditorContent(langSelector.value);  
+    });
+
+
+    // Submit form via AJAX to avoid page refresh
+    document.getElementById("run-button").addEventListener("click", function(event) {
+        event.preventDefault();
+    
+        const runButton = document.getElementById("run-button");
+        const spinner = runButton.querySelector(".spinner-border");
+        const runText = runButton.querySelector(".run-text");
+
+        spinner.classList.remove("d-none");
+        runText.textContent = "Compiling...";
+        runButton.classList.remove("btn-info");
+        runButton.classList.add("btn-danger");
+        runButton.disabled = true;
+    
+        const formElement = document.getElementById("editor-form");
+    
+        if (formElement) {
+            const formData = new FormData(formElement);
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            fetch("{% url 'ide' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                body: formData,
+            })
+            .then(response => response.json())  
+            .then(data => {                
+                document.getElementById("output").innerHTML = `<pre class="p-3 m-0 text-white">${data.output || "// Output will appear here"}</pre>`;
+            })
+            .catch(error => {
+                document.getElementById("loading-spinner").style.display = "none";
+                console.error("Error:", error);
+            })
+            .finally(() => {
+                spinner.classList.add("d-none");
+                runText.textContent = "▶ Run";
+                runButton.classList.remove("btn-danger");
+                runButton.classList.add("btn-info");
+                runButton.disabled = false;
+            });
+        } else {
+            console.error("Form element not found");
+        }
+    });
+    
+  </script>
+  
+{% endblock %}

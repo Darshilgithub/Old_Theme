@@ -1,0 +1,359 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  - {{ course.title|escape }} Course
+{% endblock %}
+{% block internal_style %}
+  <style>
+    ins {
+      text-decoration: none;
+    }
+    
+    .time {
+      font-size: 14px;
+      color: var(--badge-color);
+      display: block;
+      font-style: italic;
+      margin-top: 1px;
+    }
+    
+    .enroll-container {
+      background-color: var(--text-color-2);
+      color: var(--text-color-1);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .enroll-container:hover,
+    .enroll-container.btn:active {
+      background-color: var(--text-color-2);
+      opacity: 0.8;
+    }
+    
+    #courseModules .accordion-item .accordion-header {
+      background-color: var(--icon-color);
+    }
+    
+    #courseModules .accordion-item .accordion-collapse .accordion-body .list-group-item {
+      background-color: var(--bg-color-4-a) !important;
+      color: var(--text-color-1) !important;
+    }
+    
+    #courseModules .accordion-item .accordion-collapse .accordion-body .list-group-item:hover,
+    #courseModules .accordion-item .accordion-collapse .accordion-body .list-group-item:focus,
+    #courseModules .accordion-item .accordion-collapse .accordion-body .list-group-item:active {
+      color: var(--text-color-2) !important;
+    }
+    
+    #pills-tab .nav-item .nav-link.tab {
+      cursor: pointer;
+      color: var(--text-color-1);
+      font-weight: bold;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s ease-in-out;
+    }
+    
+    #pills-tab .nav-item .nav-link.tab.active {
+      border-bottom: 2px solid var(--text-color-3);
+      color: var(--text-color-2);
+    }
+    
+    #pills-Overview {
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      line-height: 1.6em;
+      color: rgb(190, 197, 203);
+    }
+    
+    #pills-Overview > h2 {
+      color: var(--blue-color);
+      text-decoration: solid;
+      font-weight: bolder;
+    }
+    
+    #pills-Overview li::marker {
+      color: var(--text-color-3);
+    }
+    #pills-Overview {
+      white-space: normal;
+      overflow-wrap: break-word;
+    }
+    
+    .related-courses h3 {
+      color: var(--text-color-2);
+      font-weight: bolder;
+    }
+    video::-internal-media-controls-download-button {
+    display: none;
+}
+video::-webkit-media-controls-enclosure {
+    overflow: hidden;
+}
+body, video {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.card-img-top {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0 !important;
+}
+
+  </style>
+{% endblock %}
+{% block body_content %}
+  <div class="course-banner pt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 pb-5">
+          <div class="position-relative mb-2">
+            {% if course.intro_video %}
+            <video controls controlsList="nodownload" preload="auto" id="introVideo" class="intro-video" poster="{{ course.thumbline_image.url }}">
+                <source src="{{ course.intro_video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <script>
+                document.getElementById('introVideo').addEventListener('contextmenu', event => event.preventDefault());
+            </script>
+        {% else %}
+            <img src="{{ course.image.url }}" alt="Course Image" class="card-img-top">
+        {% endif %}
+        
+          </div>
+          <div>
+            <div class="fs-4">{{ course.title|escape }}</div>
+
+            <div class="d-flex align-items-center justify-content-between pt-2">
+              {% if purchased %}
+                  <a href="{% url 'my_courses' %}" class="btn btn-secondary py-2 enroll-container" style="color: var(--text-color-black);">PLAY</a>
+                {% else %}
+                  {% if course.is_free_course %}
+                    <em class="fs-5">Free: <strong class="text-info">$0</strong></em>
+                    <form method="post" action="{% if user.is_authenticated %}?action=free_enroll{% else %}{% url 'login' %}?next={{ request.path }}{% endif %}">
+                    {% csrf_token %}
+                    <button class="btn btn-primary py-2 enroll-container"style="color: var(--text-color-black);">ENROLL NOW</button>
+                    </form>
+                  {% else %}
+                    <em class="fs-5">Price: <strong class="text-info">₹{{ course.price }}</strong></em>
+                    <form method="post" action="{% if user.is_authenticated %}?action=payment{% else %}{% url 'login' %}?next={{ request.path }}{% endif %}">
+                   {% csrf_token %}
+                    <button class="btn btn-primary py-2 enroll-container"style="color: var(--text-color-black);">ENROLL NOW</button>
+                    </form>
+                  {% endif %}
+             {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 mb-4 mb-lg-0 position-relative">
+          <h1 class="course-title mb-4 fw-bold" style="color: var(--icon-color);">{{ course.title|escape }}</h1>
+          <p class="text-white">{{ course.sub_title|escape }}</p>
+
+          <div class="course-rating">
+            <div class="rating" style="color: gold;">
+              <span><i class="fas fa-star"></i></span>
+              <span><i class="fas fa-star"></i></span>
+              <span><i class="fas fa-star"></i></span>
+              <span><i class="fas fa-star"></i></span>
+              <span><i class="fas fa-star-half-alt"></i></span>
+              <span class="text-white fw-bold">4.5 / 5</span>
+            </div>
+          </div>
+
+          <ul class="list-group list-group-flush py-4">
+            <li class="list-group-item d-flex py-2 text-white bg-transparent border-white-10">
+              <div class="text-white me-2">
+                <i class="bi bi-tags"></i>
+              </div>
+              <h6 class="text-white">Category</h6>
+              <span class="ms-auto">{{ course.category|escape }}</span>
+            </li>
+
+            <li class="list-group-item d-flex py-2 text-white bg-transparent border-white-10">
+              <div class="text-white me-2">
+                <i class="bi bi-clock-history"></i>
+              </div>
+              <h6 class="text-white">Duration</h6>
+              <span class="ms-auto">{{ total_duration|escape }}</span>
+            </li>
+            <li class="list-group-item d-flex py-2 text-white bg-transparent border-white-10">
+              <div class="text-white me-2">
+                <i class="bi bi-collection-play"></i>
+              </div>
+              <h6 class="text-white">Lectures</h6>
+              <span class="ms-auto">{{ total_lessons|escape }}</span>
+            </li>
+            <li class="list-group-item d-flex py-2 text-white bg-transparent border-white-10">
+              <div class="text-white me-2">
+                <i class="bi bi-people"></i>
+              </div>
+               <h6 class="text-white">Enrolled</h6>
+              <span class="ms-auto">
+                 {{ purchase_count|add:"7000" }} students
+              </span>
+            </li>
+            <li class="list-group-item d-flex py-2 text-white bg-transparent border-white-10">
+              <div class="text-white me-2">
+                <i class="bi bi-graph-up-arrow"></i>
+              </div>
+              <h6 class="text-white">Skill level</h6>
+              <span class="ms-auto">{{ course.level|escape }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container body-content" data-aos="fade-right" data-aos-duration="1500">
+    <div class="row">
+      <div class="col-lg-8">
+        <ul id="pills-tab" class="nav course-tabs h5 my-4 d-flex align-items-center" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link tab active mr-4" id="pills-Overview-tab" data-bs-toggle="pill" data-bs-target="#pills-Overview" type="button" role="tab" aria-controls="pills-Overview" aria-selected="true">Overview</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link tab mr-4" id="pills-Modules-tab" data-bs-toggle="pill" data-bs-target="#pills-Modules" type="button" role="tab" aria-controls="pills-Modules" aria-selected="false">Modules</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link tab mr-4" id="pills-faq-tab" data-bs-toggle="pill" data-bs-target="#pills-faq" type="button" role="tab" aria-controls="pills-faq" aria-selected="false">FAQ</a>
+          </li>
+        </ul>
+
+        <div class="tab-content mx-4" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="pills-Overview" role="tabpanel" aria-labelledby="pills-Overview-tab">{{ course.overview|safe }}</div>
+
+          <div class="tab-pane fade" id="pills-Modules" role="tabpanel" aria-labelledby="pills-Modules-tab">
+            <section class="accordion my-4" id="courseModules">
+              {% for chapter in chapters %}
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="chapter-{{ forloop.counter }}">
+                    <a class="accordion-button {% if not forloop.first %}collapsed{% endif %} py-4"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#course-{{ forloop.counter }}"
+                      aria-expanded="{% if forloop.first %}
+                        true
+                      {% else %}
+                        false
+                      {% endif %}"
+                      aria-controls="course-{{ forloop.counter }}">
+                      {{ chapter.title|escape }}
+                    </a>
+                  </h2>
+                  <div id="course-{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" aria-labelledby="chapter-{{ forloop.counter }}" data-bs-parent="#courseModules">
+                    <div class="accordion-body list-group m-0 p-0">
+                      {% for lesson in chapter.course_lesson_set.all %}
+                        <button type="button" class="list-group-item list-group-item-action py-4 border-bottom" {% if purchased %} onclick="window.location.href='{% url 'course_content' course.course_slug lesson.slug %}'" {% endif %}>
+                          <div class="d-flex align-items-center">
+                            <i class="bi bi-camera-video-fill mx-2"></i>
+                            <span class="px-2">{{ lesson.title|escape }}</span>
+                            <div class="ms-auto">
+                              <div class="badge badge-info mx-4 p-2 d-flex">
+                                <div class="me-2">
+                                  <i class="bi bi-clock-history"></i>
+                                </div>
+                                {{ lesson.duration|escape }}
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </section>
+          </div>
+
+          <div class="tab-pane fade" id="pills-faq" role="tabpanel" aria-labelledby="pills-faq-tab">
+            <div class="accordion px-0" id="Faq">
+              {% for i in faqs %}
+                <div class="card mb-5">
+                  <div class="card-header border-bottom" style="background-color: var(--blue-color);" id="question{{ forloop.counter }}">
+                    <h2 class="mb-0"><button class="btn btn-link btn-block text-left fw-bold" style="color: var(--bg-color-1);" type="button" data-bs-toggle="collapse" data-bs-target="#Faq{{ forloop.counter }}" aria-expanded="true" aria-controls="Faq{{ forloop.counter }}">{{ i.question|escape }}</button></h2>
+                  </div>
+
+                  <div id="Faq{{ forloop.counter }}" class="collapse {% if forloop.first %}show{% endif %}" aria-labelledby="question{{ forloop.counter }}" data-bs-parent="#Faq">
+                    <div class="card-body py-4 text-white" style="background-color: var(--bg-color-4-a);">{{ i.answer|escape }}</div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="related-courses my-4 p-4">
+          <h3 class="pt-0">Related Courses</h3>
+          <ul class="list-unstyled">
+            {% for i in related_courses %}
+              <li class="py-4">
+                <a href="{% url 'course_detail' i.course_slug %}" class="d-flex align-items-top">
+                  <img src="{{ i.thumbline_image.url|escape }}" class="w-50 rounded shadow img-fluid" alt="course" />
+                  <div class="ms-3 price">
+                    <p class="fw-bold h5 text-align-justify text-white">{{ i.title|escape }}</p>
+                    <hr />
+                    <div class="d-flex align-items-center">
+                      <ins class="h4 course-price text-info">₹{{ i.price|escape }}</ins>
+                    </div>
+                  </div>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block internal_script %}
+  {% if order is not None %}
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+      var options = {
+        key: 'rzp_live_yScktHn3SUYxnY',
+        name: 'Vulntech',
+        description: 'Payment For {{ course.title|escapejs }}',
+        image: "{% static 'images/site_logo.png' %}",
+        currency: "INR", 
+        amount: {{ order.amount }},
+        order_id: '{{ order.id|escapejs }}',
+        callback_url: "{% url 'payment_verification' %}",
+        prefill: {
+          name: '{{ order.notes.name|escapejs }}',
+          email: '{{ order.notes.email|escapejs }}',
+          contact: '{{ order.notes.phone|escapejs }}'
+        },
+        theme: {
+          color: '#3399cc'
+        }
+      };
+      var rzpl = new Razorpay(options);
+      rzpl.open();
+</script>
+
+  {% endif %}
+
+  <script>
+    $(document).ready(function () {
+      $('#pills-tab .nav-item .nav-link').on('click', function (e) {
+        e.preventDefault();
+        $('#pills-tab .nav-item .nav-link').removeClass('tab active');
+        $(this).addClass('tab active');
+    
+        var targetContentId = $(this).data('bs-target');
+    
+        $('.tab-pane').removeClass('show active');
+    
+        $(targetContentId).addClass('show active');
+      });
+    });
+  </script>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+{% endblock %}

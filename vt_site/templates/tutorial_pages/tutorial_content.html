@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - {{tutorial.title}} Tutorial{% endblock %}
+{% block internal_style %}
+<style>
+    
+
+    .container {
+        max-width: 1800px;
+        width: 100% !important;
+        
+    }
+    .tutorial_index {
+        background-color: #161616;
+    }
+    .row {
+        max-width: 2000px;
+        margin: auto;
+        
+    }
+    .col-lg-3 {
+        flex: 0 0 auto;
+        width: 23%;
+        
+    }
+    
+</style>
+{% endblock %}
+{% block sm-nav-block %}
+        <span class="sm-nav-item">
+            <a class="nav-link mx-2" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="The usage will be revealed in the future."><i class="fas fa-coins mx-2"></i><span>100</span></a>
+            <!-- <a class="nav-link mx-2"><img src="../images/icons-user.png" alt="user" class="img-fluid rounded-circle"></a> -->
+            
+        </span>
+    {% endblock %}
+{% block body_content %}
+
+    <section class="pb-5 px-0">
+        <div class="container">
+            <div class="row py-5">
+                <div class="col-12 col-md-4 col-lg-3 mx-0 mx-md-2 px-0 tutorial_index">
+                    <ul class="nav flex-column">
+                        {% for chapter in chapters %}
+                            <li class="nav-item">
+                            <span class="nav-link index_title"style="color: #1E1E1E;">{{chapter.title}}</span>
+                            </li>
+
+                            {% for i in chapter.tutorials_lesson_set.all %}
+                                <li class="nav-item">
+                                    <a class="nav-link {% if i.slug == lesson.slug %}active{% endif %}" href="{{i.get_absolute_url}}">{{i.title}}</a>
+                                </li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+
+                </div>
+
+                <div class="col-12 col-md-7 col-lg-6 pt-5 mx-0 mx-md-2 px-2 px-md-5 blog_post-content">
+                    <h2 class="blog-post-title">{{ lesson.title }}</h2>
+                    <!-- <div class="d-flex justify-content-between align-items-center py-3">
+                        <a href="{{lesson.get_absolute_url}}" class="btn btn-primary">Previous</a>
+                        <a href="{{i.get_absolute_url}}" class="btn btn-primary">Next</a>
+                    </div> -->
+                    <div class="d-flex justify-content-between align-items-center py-3">
+                        <a href="{% if previous_lesson %}{% url 'tutorial_content' slug=slug lesson_slug=previous_lesson.slug %}{% endif %}" class="btn btn-primary {% if not previous_lesson %}disabled{% endif %}" id="previous-lesson"style="background-color: #DDF247; color: var(--text-color-black);border: none;">Previous</a>
+                        <a href="{% if next_lesson %}{% url 'tutorial_content' slug=slug lesson_slug=next_lesson.slug %}{% endif %}" class="btn btn-primary {% if not next_lesson %}disabled{% endif %}" id="next-lesson"style="background-color: #DDF247; color: var(--text-color-black);border: none;">Next</a>
+                    </div>
+                    
+                    
+
+                    <div class="post-content py-3">
+                        {{ lesson.content|safe }}
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center py-3">
+                        <a href="{% if previous_lesson %}{% url 'tutorial_content' slug=slug lesson_slug=previous_lesson.slug %}{% endif %}" class="btn btn-primary {% if not previous_lesson %}disabled{% endif %}" id="previous-lesson"style="background-color: #DDF247; color: var(--text-color-black);border: none;">Previous</a>
+                        <a href="{% if next_lesson %}{% url 'tutorial_content' slug=slug lesson_slug=next_lesson.slug %}{% endif %}" class="btn btn-primary {% if not next_lesson %}disabled{% endif %}" id="next-lesson"style="background-color: #DDF247; color: var(--text-color-black);border: none;">Next</a>
+                    </div>
+                    
+                    
+                </div>
+                
+                
+                <!-- <div class="col-lg-3 col-0"></div> -->
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block internal_script %}
+<script>
+    $(document).ready(function () {
+        var max_height = Math.max(
+            $('.tutorial_index').outerHeight(),
+            $('.blog_post-content').outerHeight()
+        );
+
+        $('.tutorial_index, .blog_post-content').css('min-height', max_height + 'px');
+    });
+</script>
+{% endblock %}

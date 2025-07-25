@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - Plans{% endblock %}
+{% block body_content %}
+
+
+    <div class="container py-5">
+        <div class="row justify-content-center mb-5">
+            <div class="text-center mb-5 mb-md-8">
+                <h2 class="mb-1 plans-title" data-aos="fade-right" data-aos-duration="1000">Our Study Prices</h2>
+                <p class="text-capitalize my-3">Discover your perfect program in our courses.</p>
+            </div>
+            <div class="col-md-5 col-lg-4 mb-4 mb-lg-0">
+                <div class="card price-table rounded-xl card-border-action" data-aos="flip-right" data-aos-duration="2000">
+                    <div class="card-body position-relative p-5 pt-3 p-md-5 pt-md-4">
+                        <h4 class="mb-1">Basic</h4>
+                        <h1 class="mb-5" style="color: var(--text-color-3);">Free</h1>
+
+                        <p class="mb-8">Standard listing submission, active for lifetime.</p>
+
+                        <ul class="list-group">
+                            <li class="list-group-item px-0"><i class="fa-solid fa-circle-check me-2" style="color: var(--text-color-3);"></i>Learn From the Tutorials</li>
+                            <li class="list-group-item px-0"><i class="fa-solid fa-circle-check me-2" style="color: var(--text-color-3);"></i>Free access to Blogs</li>
+                            <li class="list-group-item px-0 text-white-50"><i class="fa-solid fa-circle-xmark me-2" style="color: var(--text-color-2);"></i>creating Blogs</li>
+                            <li class="list-group-item px-0 text-white-50"><i class="fa-solid fa-circle-xmark me-2" style="color: var(--text-color-2);"></i>Access for video Courses</li>
+                            <li class="list-group-item px-0 text-white-50"><i class="fa-solid fa-circle-xmark me-2" style="color: var(--text-color-2);"></i>Hands on Experience</li>
+                          </ul>
+                        <a href="./pages/maintenance.html" class="btn btn-info btn-wide lift d-inline-block rounded-xl mt-3" style="cursor: url('./images/icon_cursor.png'), auto !important;">GET STARTED</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5 col-lg-4 mb-4 mb-lg-0">
+                <div class="card price-table rounded-xl card-border-action" data-aos="fade-zoom-in"
+                data-aos-easing="ease-in-back" data-aos-duration="2000"
+                style="border: 2px solid var(--icon-color); background:#3d314d">
+                    <div class="card-body position-relative p-5 pt-3 p-md-5 pt-md-4">
+                        <h4 class="mb-1">Advanced</h4>
+                        <h1 class="mb-5" style="color: var(--icon-color);">Rs. 499</h1>
+
+                        <p class="mb-8">Standard listing submission, active for 3 months.</p>
+
+                        <ul class="list-group">
+                            <li class="list-group-item px-0"><i class="fa-solid fa-circle-check me-2" style="color: var(--icon-color);"></i>Learn From the Tutorials</li>
+                            <li class="list-group-item px-0"><i class="fa-solid fa-circle-check me-2" style="color: var(--icon-color);"></i>Free access to Blogs</li>
+                            <li class="list-group-item px-0"><i class="fa-solid fa-circle-check me-2" style="color: var(--icon-color);"></i>creating Blogs</li>
+                            <li class="list-group-item px-0"><i class="fa-solid fa-circle-minus me-2" style="color: var(--badge-color);"></i>Access for single video Course</li>
+                            <li class="list-group-item px-0 text-white-50"><i class="fa-solid fa-circle-xmark me-2" style="color: var(--text-color-2);"></i>Hands on Experience</li>
+                          </ul>
+                        <a href="./pages/maintenance.html" class="btn btn-info btn-wide lift d-inline-block rounded-xl mt-3"  style="background-color: var(--icon-color); border:1px solid var(--icon-color);cursor: url('./images/icon_cursor.png'), auto !important;">GET STARTED</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5 col-lg-4 mb-4 mb-lg-0">
+                <div class="card price-table rounded-xl card-border-action" data-aos="flip-left" data-aos-duration="2000" style="border: 2px solid var(--line-color); background:#473243">
+                    <div class="card-body position-relative p-5 pt-3 p-md-5 pt-md-4">
+                        <h4 class="mb-1">Premium</h4>
+                        <h1 class="mb-5" style="color: var(--line-color);">Rs. 999</h1>
+
+                        <p class="mb-8">Standard listing submission, active for an year.</p>
+
+                        <ul class="list-group">
+                            <li class="list-group-item px-0"><i class="fa-solid fa-circle-check me-2"  style="color: var(--line-color);"></i>Learn From the Tutorials</li>
+                            <li class="list-group-item px-0"><i class="fa-solid fa-circle-check me-2"  style="color: var(--line-color);"></i>Free access to Blogs</li>
+                            <li class="list-group-item px-0"><i class="fa-solid fa-circle-check me-2"  style="color: var(--line-color);"></i>creating Blogs</li>
+                            <li class="list-group-item px-0"><i class="fa-solid fa-circle-check me-2"  style="color: var(--line-color);"></i>Access for single video Course</li>
+                            <li class="list-group-item px-0"><i class="fa-solid fa-circle-check me-2"  style="color: var(--line-color);"></i>Hands on Experience</li>
+                          </ul>
+                        <a href="./pages/maintenance.html" class="btn btn-info btn-wide lift d-inline-block rounded-xl mt-3" style="background-color: var(--line-color); border:1px solid var(--line-color);cursor: url('./images/icon_cursor.png'), auto !important;">GET STARTED</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

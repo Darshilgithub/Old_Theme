@@ -1,0 +1,115 @@
+{% load static %}
+<footer class="pt-8 pt-md-13 pt-xl-15 position-relative">
+    <div class="container pt-5">
+        {% for site in siteDetail %}
+        <div class="row pt-3">
+            <div class="col-12 col-md-4 col-lg-4">
+                <a class="navbar-brand d-flex align-items-center mb-3" href="{% url 'index' %}">
+                    <img src="{% static './images/logo.png' %}" alt="Logo" class="d-inline-block align-text-top">
+                </a>
+                <p class="mb-4 font-size-sm-alone">{{site.footer_desc}}</p>
+                <ul class="list-unstyled list-inline list-social mb-4 mb-md-0">
+                    {% for i in site.site_details_links_set.all %}
+                    <li class="list-inline-item list-social-item">
+                        <a href="{{i.link}}" target="__blank"
+                            class="text-secondary font-size-sm w-36 h-36 shadow-dark-hover d-flex align-items-center justify-content-center rounded-circle border-hover">
+                            <i class="{{i.icon}}"></i>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="col-12 col-md-4 col-lg-2">
+                <div class="mb-5 mb-xl-0">
+                    <h5 class="mb-5">Our Company</h5>
+                    <div>
+                        <ul class="list-unstyled font-size-sm-alone mb-6 mb-md-8 mb-lg-0">
+                            <li class="mb-3">
+                                <a href="{% url 'about' %}" class="text-reset">About Us</a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="{% url 'contact' %}" class="text-reset">Contact Us</a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="{% url 'tutorial' %}" class="text-reset">Tutorials</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4 col-lg-2">
+                <div class="mb-5 mb-xl-0 ms-xl-6">
+                    <h5 class="mb-5">Terms Pages</h5>
+                    <div>
+                        <ul class="list-unstyled font-size-sm-alone mb-6 mb-md-8 mb-lg-0">
+                            {% for i in terms_pages %}
+                            <li class="mb-3">
+                                <a href="{{i.get_absolute_url}}" class="text-reset">{{i.name}}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-8 offset-md-4 offset-lg-0 col-lg-4">
+                <div class="mb-5 mb-xl-0">
+                    <h5 class="mb-5">Contact Us</h5>
+                    <div>
+                        <div class="mb-4 d-flex align-items-center">
+                            <i class="fa-solid fa-location-dot me-2" style="color: var(--line-color);"></i>
+                            <span class="mx-2">Mumbai, India</span>
+                        </div>
+                        {% if site.contact_number.national_number %}
+                        <div class="mb-4 d-flex align-items-center">
+                            <i class="fas fa-phone me-2"></i>
+                            <a href="tel:{{site.contact_number}}" class="font-size-sm-alone text-white" style="text-decoration: none;">
+                                {{site.contact_number.national_number}}
+                            </a>
+                        </div>
+                        {% endif %}
+                        <div class="mb-4 d-flex align-items-center">
+                            <i class="fas fa-envelope me-2" style="color: var(--line-color);"></i>
+                            <a href="mailto:{{site.contact_mail}}" class="text-info mx-1" style="text-decoration: none;">
+                                {{site.contact_mail}}
+                            </a>
+                        </div>
+                        <div class="mb-4 d-flex align-items-center">
+                            <i class="fab fa-discord me-2" style="color: #7289da;"></i>
+                            <a href="https://discord.gg/JRMe9s4U" target="_blank" class="text-info mx-1" style="text-decoration: none;">
+                                Join us on Discord
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 mt-md-5">
+                <div class="border-top pb-5 pt-6 py-md-4 text-center text-xl-start d-flex flex-column d-md-block d-xl-flex flex-xl-row align-items-center">
+                    <p class="font-size-sm-alone d-block mb-0 mb-md-2 mb-xl-0 order-1 order-md-0 px-9 px-md-0">
+                        Copyright © {{site.copyright_year}} VulnTech. All Rights Reserved.
+                    </p>
+                    <div class="ms-xl-auto d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-center">
+                        <ul class="navbar-nav flex-row flex-wrap font-size-sm-alone mb-3 mb-md-0 mx-n4 me-md-5 justify-content-center justify-content-lg-start order-1 order-md-0">
+                            <li class="nav-item py-2 py-md-0 px-0 border-top-0">
+                                <a href="{% url 'index' %}" class="nav-link px-4">Home</a>
+                            </li>
+                            <li class="nav-item py-2 py-md-0 px-0 border-top-0">
+                                <a href="{% url 'about' %}" class="nav-link px-4">About Us</a>
+                            </li>
+                            <li class="nav-item py-2 py-md-0 px-0 border-top-0">
+                                <a href="{% url 'contact' %}" class="nav-link px-4">Contact Us</a>
+                            </li>
+                            <li class="nav-item py-2 py-md-0 px-0 border-top-0">
+                                <a href="{% url 'faq' %}" class="nav-link px-4">FAQ</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</footer>

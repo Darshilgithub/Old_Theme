@@ -1,0 +1,175 @@
+{% extends 'registration/settings.html' %}
+{% load static %}
+{% block title %} - Password Change{% endblock %}
+{% block content %}
+<a href="{% url 'settings' %}" class="nav-link">
+    <i class="fa-solid fa-chevron-left mx-4 my-5 d-lg-none d-block"></i>
+</a>
+{% for i in messages %}
+<div class="alert alert-warning d-flex align-items-center alert-dismissible fade show" role="alert">
+    <div class="fs-6"> {{i}}</div>
+    <button type="button" class="btn-close ms-auto bg-transparent" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+
+{% for error in combined_errors %}
+<div class="alert alert-warning d-flex align-items-center alert-dismissible mx-auto w-75 fade show" role="alert">
+    <div class="fs-6" style="font-size: 0.85em">{{ error }}</div>
+    <button type="button" class="btn-close ms-auto bg-transparent" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+
+<div class="my-0 my-lg-5 mx-5 pt-lg-3 pt-0 account_box">
+    <h2 class="mb-3">Password change</h2>
+    <p class="fs-6 text-white-50">Please enter your old password, for security’s sake, and then enter your new password
+        twice so we can verify you typed it in correctly.</p>
+    <form method="post" id="pass_change_form">
+        {% csrf_token %}
+        <div class="mb-3 w-md-50 w-100">
+            <label for="id_old_password" class="form-label">old Password</label>
+            <div class="input-group">
+                <input type="password" class="form-control shadow-none p-1 password" id="id_old_password"
+                    name="{{ form.old_password.name }}" required>
+                <div class="input-group-text p-1 show_password">
+                    <i class="fas fa-eye-slash text-white p-1"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3 w-md-50 w-100">
+            <label for="reset_password" class="form-label">New Password</label>
+            <div class="input-group position-relative">
+                <input type="password" class="form-control shadow-none p-1 password" id="reset_password"
+                    name="{{ form.new_password1.name }}" required>
+                <div class="input-group-text p-1 show_password">
+                    <i class="fas fa-eye-slash text-white p-1"></i>
+                </div>
+                <div class="p-3 password_strength">
+                    <h5>Password Contains</h5>
+                    <ul class="list-group mt-2">
+                        <li class="list-group-item">At least 8 characters long</li>
+                        <li class="list-group-item">At least 1 number (0-9)</li>
+                        <li class="list-group-item">At least 1 lowercase letter (a-z)</li>
+                        <li class="list-group-item">At least 1 uppercase letter (A-Z)</li>
+                        <li class="list-group-item">At least 1 special symbol</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="mb-3 w-md-50 w-100">
+            <label for="reset_confirm_password" class="form-label">Confirm New Password</label>
+            <div class="input-group">
+                <input type="password" class="form-control shadow-none p-1 password" id="reset_confirm_password"
+                    name="{{ form.new_password2.name }}" required>
+                <div class="input-group-text p-1 show_password">
+                    <i class="fas fa-eye-slash text-white p-1"></i>
+                </div>
+            </div>
+            <h6 class="text-danger input-warning mt-2" id="reset_password-warning" style="display: none;">Doesn't match
+                with the Password</h6>
+        </div>
+
+		<button class="btn my-3" style="background-color: var(--icon-color); border: none; color: var(--text-color-black);">Update</button>
+        <p class="note"><b>Note : </b><i>Once delete the account then never get.</i></p>
+    </form>
+    {% if messages %}
+    {% for message in messages %}
+    <div id="message_toast"
+        class="toast align-items-center {% if message.tags == 'error' %} text-bg-danger {% elif message.tags == 'success' %} text-bg-success {% else %} text-bg-secondary {% endif %} border-0 position-absolute"
+        role="alert" aria-live="assertive" aria-atomic="true" style="top: 0%;left: 40%;transform: translate(-50%);">
+        <div class="d-flex align-items-center">
+            <div class="toast-body ">
+                <i
+                    class="bi {% if message.level == 'error' %} bi-exclamation-circle-fill {% elif message.tags == 'success' %} bi-check-circle-fill {% endif %} mx-2"></i>
+                <span>{{ message }}</span>
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto bg-transparent" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% if combined_errors %}
+    {% for error in combined_errors %}
+    <div id="message_toast"
+        class="toast align-items-center {% if message.tags == 'error' %} text-bg-danger {% elif message.tags == 'success' %} text-bg-success {% else %} text-bg-secondary {% endif %} border-0 position-absolute"
+        role="alert" aria-live="assertive" aria-atomic="true" style="top: 0%;left: 40%;transform: translate(-50%);">
+        <div class="d-flex align-items-center">
+            <div class="toast-body ">
+                <i
+                    class="bi {% if message.level == 'error' %} bi-exclamation-circle-fill {% elif message.tags == 'success' %} bi-check-circle-fill {% endif %} mx-2"></i>
+                <span>{{ error }}</span>
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto bg-transparent" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block internal_script %}
+<script>
+    const password = document.getElementById('reset_password');
+    const confirm_password = document.getElementById('reset_confirm_password');
+    const password_strength = document.querySelectorAll('.password_strength .list-group-item');
+    const pass_warning = document.getElementById('reset_password-warning');
+    let valid_form = true;
+    let password_conditions = [
+        { regex: /.{8}/ },
+        { regex: /\d/ },
+        { regex: /[a-z]/ },
+        { regex: /[A-Z]/ },
+        { regex: /[^a-zA-Z0-9]/ }
+    ]
+
+    password.addEventListener('input', function () {
+        let allConditionsMet = true;
+        password_conditions.forEach((item, i) => {
+            var check = item.regex.test(password.value);
+
+            if (check) {
+                password_strength[i].classList.add('checked');
+            }
+            else {
+                password_strength[i].classList.remove('checked');
+                allConditionsMet = false;
+            }
+        })
+        if (allConditionsMet) {
+            document.querySelector('.password_strength').style.opacity = 0;
+            valid_form = true;
+        } else {
+            document.querySelector('.password_strength').style.opacity = 1;
+            valid_form = false;
+        }
+
+
+    })
+
+    confirm_password.addEventListener('input', function () {
+        const errorElement = confirm_password.nextSibling;
+        if (confirm_password.value !== password.value) {
+            confirm_password.classList.add('warning');
+            document.querySelector('#reset_confirm_password ~ .input-group-text').classList.add('warning');
+            pass_warning.style.display = "block";
+            valid_form = false;
+        }
+        else {
+            confirm_password.classList.remove('warning');
+            document.querySelector('#reset_confirm_password ~ .input-group-text').classList.remove('warning');
+            pass_warning.style.display = "none";
+            valid_form = true;
+        }
+    })
+
+    document.getElementById('pass_change_form').onsubmit = (event) => {
+        if (!valid_form) {
+            event.preventDefault();
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - View Profile{% endblock %}
+{% block body_content %}
+
+<div class="container">
+    <div class="d-flex align-items-center justify-content-center m-md-5 shadow user_profile_box">
+        <div class="row p-3">
+            <div class="col-lg-5">
+                <!-- Updated -->
+                <img src="{% if user.pic %}{{ user.pic.url }}{% else %}{% static 'images/icon-profile.png' %}{% endif %}" 
+                     alt="user_profile_image" 
+                     class="user_profile_image img-fluid rounded p-md-4 p-0">
+            </div>
+            <div class="col-lg-7 py-3 px-4 px-lg-0">
+                <div class="d-flex align-items-center mt-sm-0 mt-3">
+                    <div class="py-2 d-flex align-items-center my-3 details" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="10">
+                        <div class="rounded d-flex align-items-center justify-content-center"><i class="fas fa-user"></i></div>
+                        <div class="mx-2 d-flex">
+                            <i>First Name</i>
+                            <span class="fw-bold">{{ user.first_name }}</span>
+                        </div>
+                    </div>
+
+                    <div class="py-2 d-flex align-items-center my-3 details mx-auto" data-aos="fade-right" data-aos-duration="1500" data-aos-delay="10">
+                        <div class="rounded d-flex align-items-center justify-content-center"><i class="fas fa-user"></i></div>
+                        <div class="mx-2 d-flex">
+                            <i>Last Name</i>
+                            {% if user.last_name %}
+                                <span class="fw-bold">{{ user.last_name }}</span>
+                            {% else %}
+                                <span class="fw-bold">--</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="py-2 d-flex align-items-end my-3 details" data-aos="fade-right" data-aos-duration="1500" data-aos-delay="10">
+<!-- Mwehehehehe -->
+			<div class="rounded d-flex align-items-center justify-content-center" style="background: var(--text-color-2); color: var(--text-color-black);">
+  				<i class="fas fa-user"></i>
+		</div>
+
+
+
+                    <div class="mx-2 d-flex">
+                        <i>Mobile</i>
+                        <span class="fw-bold">{{ user.mobile }}</span>
+                    </div>
+                    <div class="d-flex align-items-end text-success fw-bold m-0 p-0 d-none d-sm-inline">
+                        <i class="bi bi-patch-check-fill mx-2"></i>
+                        <span>Verified</span>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between" style="flex-wrap: wrap;">
+                    <div class="py-2 d-flex align-items-center my-3 details" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="10">
+                        <div class="rounded d-flex align-items-center justify-content-center" style="background: var(--floor-color);"><i class="fas fa-user-circle"></i></div>
+                        <div class="mx-2 d-flex">
+                            <i>Username</i>
+                            <span class="fw-bold">{{ user.username }}</span>
+                        </div>
+                    </div>
+
+                    <div class="py-2 d-flex align-items-end my-3 details" data-aos="fade-right" data-aos-duration="1500" data-aos-delay="10">
+                        <div class="rounded d-flex align-items-center justify-content-center" style="background: var(--floor-color);"><i class="fas fa-envelope"></i></div>
+                        <div class="mx-2 d-flex">
+                            <i>Email</i>
+                            <span class="fw-bold">{{ user.email }}</span>
+                        </div>
+.                        <div class="d-flex align-items-end text-success fw-bold m-0 p-0 d-none d-sm-inline">
+                            <i class="bi bi-patch-check-fill mx-2"></i>
+                            <span>Verified</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <a href="{% url 'edit_profile' %}" class="btn w-100 fw-bold my-3"style="color: var(--text-color-black);">Edit Profile</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

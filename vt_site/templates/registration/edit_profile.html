@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - Edit Profile{% endblock %}
+{% block body_content %}
+
+<div class="container">
+    <div class="d-flex align-items-center justify-content-center m-md-5 shadow user_profile_box account_box">
+        <form class="row p-3" method="post" enctype="multipart/form-data" id="profile-form">
+            {% csrf_token %}
+            <div class="col-lg-5">
+                {% if form.pic.value %}
+                    <img src="{{ user.pic.url|escape }}" alt="user_profile_image"
+                         class="user_profile_image img-fluid rounded p-md-4 p-0">
+                {% else %}
+                    <img src="{% static 'images/icon-profile.png' %}"
+                         alt="user_profile_image"
+                         class="user_profile_image img-fluid rounded p-md-4 p-0">
+                {% endif %}
+                {{ form.pic }}
+            </div>
+            <div class="col-lg-7 py-3 px-4 px-lg-0">
+                <div class="d-flex align-items-center mt-sm-0 mt-3">
+                    <div class="py-2 d-flex align-items-center my-3 details" data-aos="fade-right"
+                         data-aos-duration="1000" data-aos-delay="10">
+                        <div class="rounded d-flex align-items-center justify-content-center">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="mx-2 d-flex">
+                            <section><i>{{ form.first_name.label|escape }}</i></section>
+                            {{ form.first_name }}
+                        </div>
+                    </div>
+
+                    <div class="py-2 d-flex align-items-center my-3 details mx-auto" data-aos="fade-right"
+                         data-aos-duration="1500" data-aos-delay="10">
+                        <div class="rounded d-flex align-items-center justify-content-center">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="mx-2 d-flex">
+                            <section><i>{{ form.last_name.label|escape }}</i></section>
+                            {{ form.last_name }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="py-2 d-flex align-items-end my-3 details" data-aos="fade-right" data-aos-duration="1500"
+                     data-aos-delay="10">
+<!-- Mwehehehe -->
+		<div class="rounded d-flex align-items-center justify-content-center"style="background: var(--text-color-2); color: var(--text-color-black);">
+			  <i class="fas fa-user"></i>
+		</div>
+
+
+                    <div class="mx-2 d-flex">
+                        <section class="d-flex align-items-center">
+                            <i>{{ form.mobile.label|escape }}</i>
+                        </section>
+                        {{ form.mobile }}
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between" style="flex-wrap: wrap;">
+                    <div class="py-2 d-flex align-items-center my-3 details" data-aos="fade-right"
+                         data-aos-duration="1500" data-aos-delay="10">
+                        <div class="rounded d-flex align-items-center justify-content-center"
+                             style="background: var(--floor-color);"><i class="fas fa-user-circle"></i></div>
+                        <div class="mx-2 d-flex">
+                            <section><i>{{ form.username.label|escape }}</i></section>
+                            {{ form.username }}
+                        </div>
+                    </div>
+
+                    <div class="py-2 d-flex align-items-end my-3 details" data-aos="fade-right" data-aos-duration="1500"
+                         data-aos-delay="10">
+                        <div class="rounded d-flex align-items-center justify-content-center"
+                             style="background: var(--floor-color);"><i class="fas fa-envelope"></i></div>
+                        <div class="mx-2 d-flex">
+                            <section class="d-flex align-items-center">
+                                <i>{{ form.email.label|escape }}</i>
+                            </section>
+                            {{ form.email }}
+                        </div>
+                    </div>
+                </div>
+<!-- Mwehehehehe -->
+
+                <button class="btn w-100 fw-bold my-3" type="submit"style="color: var(--text-color-black);">Update</button>
+            </div>
+        </form>
+        {% if messages %}
+            {% for message in messages %}
+                <div id="message_toast"
+                     class="toast align-items-center {% if message.tags == 'error' %}text-bg-danger{% elif message.tags == 'success' %}text-bg-success{% else %}text-bg-secondary{% endif %} border-0 position-absolute"
+                     role="alert" aria-live="assertive" aria-atomic="true"
+                     style="top: -5%; left: 50%; transform: translate(-50%);">
+                    <div class="d-flex align-items-center">
+                        <div class="toast-body">
+                            <i class="bi {% if message.level == 'error' %}bi-exclamation-circle-fill{% elif message.tags == 'success' %}bi-check-circle-fill{% endif %} mx-2"></i>
+                            <span>{{ message|escape }}</span>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto bg-transparent"
+                                data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block internal_script %}
+<script>
+    const input = document.getElementById("id_mobile");
+    const f_nameInput = document.getElementById("id_first_name");
+    const l_nameInput = document.getElementById("id_last_name");
+    const username = document.getElementById("id_username");
+    const fileInput = document.getElementById('id_pic');
+    let valid_form = true;
+    const toast = document.getElementById('message_toast');
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toast);
+    $(document).ready(function () {
+        if (toast) toastBootstrap.show();
+    });
+
+    // Use escapejs for JavaScript injection safety if needed:
+    window.intlTelInput(input, {
+        initialCountry: "{{ countryCode|escapejs }}",
+        utilsScript: "{% static 'js/script.js' %}?1695806485509"
+    });
+
+    fileInput.addEventListener('input', function (event) {
+        const file = event.target.files[0];
+        const validImageTypes = [
+            'image/webp',
+            'image/tiff',
+            'image/svg+xml',
+            'image/png',
+            'image/jpeg',
+            'image/vnd.microsoft.icon',
+            'image/gif',
+            'image/bmp',
+        ];
+        const validExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.tiff', '.svg', '.ico'];
+        const maxSize = 2 * 1024 * 1024;
+    
+        // Clear previous error messages
+        const errorMessages = document.querySelectorAll('.input-warning');
+        errorMessages.forEach(msg => msg.remove());
+    
+        if (file) {
+            // Validate MIME type
+            if (!validImageTypes.includes(file.type)) {
+                const errorMessage = '<h6 class="text-danger input-warning mt-2">Please select a valid image file.</h6>';
+                fileInput.insertAdjacentHTML('afterend', errorMessage);
+                valid_form = false;
+                return;
+            }
+    
+            // Validate file extension (strict check)
+            const fileName = file.name.toLowerCase();
+            const fileExtension = fileName.substring(fileName.lastIndexOf('.'));
+            if (!validExtensions.includes(fileExtension)) {
+                const errorMessage = '<h6 class="text-danger input-warning mt-2">Invalid file extension. Allowed extensions are: ' + validExtensions.join(', ') + '</h6>';
+                fileInput.insertAdjacentHTML('afterend', errorMessage);
+                valid_form = false;
+                return;
+            }
+    
+            // Validate file size
+            if (file.size > maxSize) {
+                const errorMessage = '<h6 class="text-danger input-warning mt-2">File size exceeds 2MB. Please choose a smaller file.</h6>';
+                fileInput.insertAdjacentHTML('afterend', errorMessage);
+                valid_form = false;
+                return;
+            }
+        }
+    
+        valid_form = true; // Reset valid_form if no errors
+    });
+    
+    f_nameInput.addEventListener('input', function () {
+        validateInputField(f_nameInput, /^[a-zA-Z]*$/, "Only alphabets allowed");
+    });
+    
+    l_nameInput.addEventListener('input', function () {
+        validateInputField(l_nameInput, /^[a-zA-Z]*$/, "Only alphabets allowed");
+    });
+    
+    username.addEventListener('input', function () {
+        validateInputField(username, /^[a-zA-Z]*$/, "Only alphabets allowed");
+    });
+    
+    function validateInputField(input, regex_code, error_msg) {
+        let errorElement = input.nextSibling;
+        while (errorElement && errorElement.nodeType === 3) {
+            errorElement = errorElement.nextSibling;
+        }
+        if (!regex_code.test(input.value)) {
+            input.classList.add('warning');
+            if (!errorElement) {
+                const errorMessage = '<h6 class="text-danger input-warning mt-2">' + error_msg + '</h6>';
+                input.insertAdjacentHTML('afterend', errorMessage);
+            }
+            valid_form = false;
+        } else {
+            input.classList.remove('warning');
+            if (errorElement) {
+                errorElement.remove();
+            }
+            valid_form = true;
+        }
+    }
+    
+    document.getElementById('profile-form').onsubmit = (event) => {
+        if (!valid_form) {
+            event.preventDefault();
+        }
+    }
+</script>
+{% endblock %}

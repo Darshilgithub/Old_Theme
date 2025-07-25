@@ -1,0 +1,65 @@
+{% extends 'registration/settings.html' %}
+{% load static %}
+{% block title %} - Help & Support{% endblock %}
+{% block content %}
+<a href="{% url 'settings' %}" class="nav-link">
+  <span class="mx-4 my-5 d-lg-none d-block text-secondary"><i class="fas fa-chevron-left text-white mx-2"
+      style="transform: none;"></i> Back </span>
+</a>
+<div class="my-0 my-lg-5 mx-5 pt-lg-2 pt-0">
+  <h2 class="mb-3">Account FAQ's</h2>
+  <p class="fs-6 text-white-50">Explore our comprehensive account FAQs for all the answers you need. Discover solutions
+    and guidance tailored for you.</p>
+  <div class="py-4 px-0 position-relative">
+    <ul id="pills-tab" class="nav nav-tabs fs-5 my-4 " roms-auto me-2le="tablist">
+      {% for i in account_faq_category %}
+      <li class="nav-item" role="presentation">
+        <a class="nav-link {% if forloop.first %}active{% endif %}" id="pills-faq-{{i.id}}-tab" data-bs-toggle="pill"
+          data-bs-target="#pills-faq-{{i.id}}" type="button" role="tab" aria-controls="pills-faq-{{i.id}}"
+          aria-selected="false" class="d-flex align-items-center justify-content-center"><i
+            class="{{i.icon}} mx-2"></i>{{i.name}}</a>
+      </li>
+      {% endfor %}
+      <i class="fas fa-angle-left"></i>
+      <i class="fas fa-angle-right"></i>
+    </ul>
+
+
+    <div class="tab-content">
+      {% for cate in account_faq_category %}
+      <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="pills-faq-{{cate.id}}" role="tabpanel"
+        aria-labelledby="pills-faq-{{cate.id}}-tab">
+        {% for faq in cate.account_faq_set.all %}
+        <div class="accordion px-md-4 px-0">
+          <div class="accordion-item mb-3">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed  shadow-none pe-md-5 pe-4" type="button"
+                data-bs-toggle="collapse" data-bs-target="#collapse-{{ faq.id }}" aria-expanded="true"
+                aria-controls="collapse-{{ faq.id }}">
+                {{ faq.question }}
+              </button>
+            </h2>
+            <div id="collapse-{{ faq.id }}" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                {{ faq.answer }}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block internal_script%}
+<script>
+  const sidebar = document.querySelector('.settings_box_sidebar');
+  if ($(window).width() <= 991) {
+    sidebar.style.display = 'none';
+  }
+</script>
+{% endblock%}

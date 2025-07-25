@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - FAQ{% endblock %}
+{% block body_content %}
+
+
+    <div class="container">
+        <div class="row mt-5 mb-4 p-0 contact_us_page px-5">
+                <h2 class="mb-3 text-center plans-title">FAQ's</h2>
+                <p class="fs-6 text-white-50  text-center">Explore our comprehensive FAQs for all the answers you need. Discover solutions and guidance tailored for you.</p>
+                <div class="py-4 px-0 position-relative">
+                  <ul id="pills-tab" class="nav nav-tabs fs-5 my-4" roms-auto me-2le="tablist">
+                    {% for i in faq_category %}
+                    <li class="nav-item" role="presentation">
+                      <a class="nav-link {% if forloop.first %}active{% endif %}" id="pills-faq-{{i.id}}-tab" data-bs-toggle="pill" data-bs-target="#pills-faq-{{i.id}}"
+                        type="button" role="tab" aria-controls="pills-faq-{{i.id}}" aria-selected="false"
+                        class="d-flex align-items-center justify-content-center"><i class="{{i.icon}} mx-2"></i>{{i.name}}</a>
+                    </li>
+                    {% endfor %}
+                    <i class="fas fa-angle-left"></i>
+                    <i class="fas fa-angle-right"></i>
+                  </ul>
+              
+              
+                  {% for cate in faq_category %}
+                  <div class="tab-content">
+                    <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="pills-faq-{{cate.id}}" role="tabpanel" aria-labelledby="pills-faq-{{cate.id}}-tab">
+                        {% for faq in cate.faq_set.all %}
+                        <div class="accordion px-md-4 px-0">
+                          <div class="accordion-item mb-3">
+                            <h2 class="accordion-header">
+                              <button class="accordion-button collapsed  shadow-none pe-md-5 pe-4" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-{{ faq.id }}" aria-expanded="true" aria-controls="collapse-{{ faq.id }}">
+                                {{ faq.question }}
+                              </button>
+                            </h2>
+                            <div id="collapse-{{ faq.id }}" class="accordion-collapse collapse">
+                              <div class="accordion-body">
+                                {{ faq.answer }}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      {% endfor %}
+                      </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+        
+        </div>    
+    </div>
+
+{% endblock %}
+
+{% block internal_script%}
+    <script>
+        const toast = document.getElementById('message_toast');
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toast);
+        $(document).ready(function(){
+            if(toast) toastBootstrap.show()
+        })
+    </script>
+{% endblock %}

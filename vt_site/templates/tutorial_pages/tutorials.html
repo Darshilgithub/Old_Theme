@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - Tutorials{% endblock %}
+{% block body_content %}
+
+
+    <!-- <div class="container-fluid blogs-section py-5">
+        <div class="my-3">
+            <h2 class="features-title">Learn From the Tutorials</h2>
+                <div class="input-group position-relative">
+                    <input type="search" class="form-control m-0 shadow-none search" placeholder="Search">
+                    <span class="input-group-text py-0 bg-info">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <div class="search_result py-3">No results Found</div>
+                </div>
+
+        </div>
+    </div> -->
+
+    <section class="container my-3">
+        <div class="row">
+        <div class="py-4 px-0 position-relative">
+            <div class="d-lg-flex align-items-center my-4" style="flex-wrap:wrap">
+            <ul id="pills-tab" class="nav nav-tabs fs-5" roms-auto me-2le="tablist">
+              <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="pills-All-blogs-tab" data-bs-toggle="pill" data-bs-target="#pills-All-blogs" type="button"
+                  role="tab" aria-controls="pills-All-blogs" aria-selected="true">All</a>
+              </li>
+              {% for i in category %}
+              <li class="nav-item" role="presentation">
+                <a class="nav-link" id="pills-cate-{{i.id}}-tab" data-bs-toggle="pill" data-bs-target="#pills-cate-{{i.id}}" type="button"
+                  role="tab" aria-controls="pills-cate-{{i.id}}" aria-selected="false" class="d-flex align-items-center justify-content-center"><i class="{{i.icon}} mx-2"></i>{{i.name}}</a>
+              </li>
+              {% endfor %}
+              <i class="fas fa-angle-left"></i>
+              <i class="fas fa-angle-right"></i>
+            </ul>
+            <div class="input-group search-box mt-lg-0 mt-4 me-3 ms-auto">
+                <input type="text" class="form-control m-0 shadow-none search" placeholder="Search">
+                <span class="input-group-text py-0 bg-info">
+                    <i class="bi bi-search"></i>
+                </span>
+            </div>
+            </div>
+          
+            <div class="tab-content" id="pills-tabContent">
+              <div class="tab-pane fade show active" id="pills-All-blogs" role="tabpanel" aria-labelledby="pills-All-blogs-tab">
+                <!-- {% if trend_tutorials.exists %}
+                <div class="row my-3">
+                    <div class="mb-3 d-flex align-items-center more-links">
+                        <h4>All Tutorials</h4>
+                    </div>
+                    
+                    {% for i in trend_tutorials %}
+                    <div class="col-md-3 col-6 px-md-3 px-2 mb-5">
+                        <div class="card tutorials rounded mx-auto" data-aos="fade-in" data-aos-duration="3000">
+                            <img src="{{i.image.url}}" alt="{{i.title}}" class="w-100 p-4">
+                            <h2 class="pb-3 px-3">{{i.title}}</h2>
+                            {% if i.status == 'upcoming' %}
+                                <a href="#" class="btn btn-primary my-3 mx-4 disabled"> start </a>
+                            {% else %}
+                                <a href="{{i.get_absolute_url}}" target="_blank" class="btn btn-primary my-3 mx-4"> start </a>
+                            {% endif %}
+                            {% if i.status != 'trending' %}
+                                <span class="badge text-bg-info">{{i.status}}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %} -->
+
+                {% for cate in category %}
+                    {% if cate.tutorial_set.all %}
+                    <div class="row my-4">
+                        <div class="mb-3 d-flex align-items-center more-links">
+                            <h4>{{cate.name}} Tutorials</h4>
+                            <a class="more_link ms-auto me-2" data-tab-target="pills-cate-{{cate.id}}-tab">More</a>
+                        </div>
+
+                        {% for i in cate.tutorial_set.all %}
+                        <div class="col-md-3 col-6 px-md-3 px-2 mb-5">
+                            <div class="card tutorials rounded mx-auto" data-aos="fade-in" data-aos-duration="3000">
+                                <img src="{{i.image.url}}" alt="{{i.title}}" class="w-100 p-4">
+                                <h2 class="pb-3 px-3">{{i.title}}</h2>
+                                {% if i.status == 'upcoming' %}
+                                <a href="#" class="btn btn-primary my-3 mx-4 disabled" style="color: #1E1E1E;"> > start </a>
+                                {% else %}
+                                <a href="{{i.get_absolute_url}}"  class="btn btn-primary my-3 mx-4"style="color: #1E1E1E;"> start </a>
+                                {% endif %}
+                                {% if i.status != 'none' %}
+                                    <span class="badge text-bg-info">{{i.status}}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+              </div>
+      
+              {% for cate in category %}
+                <div class="tab-pane fade" id="pills-cate-{{cate.id}}" role="tabpanel" aria-labelledby="pills-cate-{{cate.id}}-tab">
+                    
+                    <div class="row my-4">
+                        <div class=" col-12">
+                            <div class="row my-4">
+                                
+                                {% for i in cate.tutorial_set.all %}
+                                <div class="col-md-3 col-6 px-md-3 px-2 mb-5">
+                                    <div class="card tutorials rounded mx-auto" data-aos="fade-in" data-aos-duration="3000">
+                                        <img src="{{i.image.url}}" alt="{{i.title}}" class="w-100 p-4">
+                                        <h2 class="pb-3 px-3">{{i.title}}</h2>
+                                        {% if i.status == 'upcoming' %}
+                                            <a href="#" class="btn btn-primary my-3 mx-4 disabled" style="color: #1E1E1E;"> start </a>
+                                        {% else %}
+                                        <a href="{{i.get_absolute_url}}" class="btn btn-primary my-3 mx-4" style="color: #1E1E1E;"> start </a>
+                                        {% endif %}
+                                        {% if i.status != 'none' %}
+                                            <span class="badge text-bg-info">{{i.status}}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% empty %}
+                                    <p class="fs-5 text-info fw-bold">Tutorials in this category will be uploaded soon.</p>
+        
+                                {% endfor %}
+                             
+                            </div>
+                        </div>
+
+                        <!-- <div class="col-lg-3 col-12">
+                            <h4>Top Most Blogs</h4>
+                            <div class="py-1">
+                                <div class="row py-3 border-bottom">
+                                    <div class="col-6">
+                                        <img src="{% static './images/python.jpeg' %}" alt="python" style="width:100%">
+                                        
+                                    </div>
+                                    <div class="col-6">
+                                        <h3 class="top-blog-titles">Basics of Python program</h3>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                            <div class="py-1">
+                                <div class="row py-3 border-bottom">
+                                    <div class="col-6">
+                                        <img src="{% static './images/Ethical_Hacking.jpeg' %}" alt="hacking" style="width:100%">
+                                        
+                                    </div>
+                                    <div class="col-6">
+                                        <h3 class="top-blog-titles">Zero to Hero Ethical Hacking/h3>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                            
+
+                            <div class="news-letter my-5">
+                                <h2>Join Our NewsLetter</h2>
+                                <input type="text" class="form-control m-0 shadow-none my-3" placeholder="subscribe@info.com">
+                                <button class="btn my-2">Subscribe</button>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+              {% endfor %}
+              
+              
+            </div>
+            
+          </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block internal_script %}
+ 
+    <script>
+        const searchInput = document.querySelector('.search');
+        const tutorials = Array.from(document.querySelectorAll('.tutorials')); // Assuming tutorials are rendered within elements with the class 'tutorials'
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+
+            if (searchTerm === '') {
+                tutorials.forEach(tutorial => {
+                    const tutorial_parent = tutorial.parentNode
+                    tutorial.parentNode.style.display = 'block';
+                });
+            } else {
+                tutorials.forEach(tutorial => {
+                    const tutorialName = tutorial.textContent.toLowerCase();
+                    const match = tutorialName.includes(searchTerm);
+                    tutorial.parentNode.style.display = match ? 'block' : 'none';
+                });
+            }
+        });
+
+        const tutorial_link = localStorage.getItem('tutorial_link');
+        if(tutorial_link) {
+            var tab = document.getElementById(tutorial_link);
+            if(tab) {
+                tab.click();
+                window.scrollTo(0, 0);
+            }
+            localStorage.removeItem('tutorial_link');
+        }
+    </script>
+
+{% endblock %}

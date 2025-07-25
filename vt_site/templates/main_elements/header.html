@@ -1,0 +1,128 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg px-4">
+  <div class="container align-items-center">
+    <a class="navbar-brand w-25" href="{% url 'index' %}">
+      <img src="{% static './images/logo.png' %}" alt="Logo" class="d-inline-block">
+    </a>
+
+    <ul class="navbar-nav ms-auto">
+      <!-- Home link visible only on mobile -->
+      <li class="nav-item d-md-none">
+        <a href="{% url 'index' %}" class="nav-link mx-2">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+      </li>
+      
+      <!-- Always visible links (Library and Courses) -->
+            <!-- Always visible links (Library and Courses) -->
+     <li class="nav-item">
+      <a class="nav-link mx-2" href="{% url 'ide' %}">
+        <i class="fas fa-code mx-2"></i>
+        <span>Compiler</span>
+      </a>
+    </li>
+
+      <li class="nav-item">
+        <a class="nav-link mx-2" href="{% url 'tutorial' %}">
+          <i class="far fa-rectangle-list mx-2"></i>
+          <span>Library</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link mx-2" href="{% url 'courses' %}">
+          <i class="far fa-circle-play mx-2"></i>
+          <span>Courses</span>
+        </a>
+      </li>
+
+      {% if user.is_authenticated %}
+        <!-- For logged-in users, show Dashboard and Profile dropdown -->
+        <li class="nav-item">
+          <a class="nav-link mx-2" href="{% url 'my_courses' %}">
+            <i class="far fa-circle-play mx-2"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle mx-2 p-0" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {% if user.pic %}
+              <img src="{{ user.pic.url }}" alt="user" class="img-fluid rounded-circle" style="width:2.6em; aspect-ratio:1/0.95; object-fit:cover;">
+            {% else %}
+              <img src="{% static './images/icon-user.png' %}" alt="user" class="img-fluid rounded-circle" style="width:2.6em;">
+            {% endif %}
+          </a>
+          <ul class="dropdown-menu pb-3" style="background-color: #222; color: white;">
+            <li>
+              <h4 class="fw-bold py-1" style="text-align: center; color: white;">{{ user.username }}</h4>
+            </li>
+            <li><hr class="dropdown-divider" style="border-color: #555;"></li>
+            <li>
+              <a class="dropdown-item py-2" href="{% url 'view_profile' %}" style="color: white;">
+                <div class="dropdown-icon"><i class="fa-solid fa-id-badge"></i></div>
+                <span class="mx-2">View Profile</span>
+                <i class="fa-solid fa-chevron-right ms-auto"></i>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item py-2" href="{% url 'my_dashboard' %}" style="color: white;">
+                <div class="dropdown-icon"><i class="fa-solid fa-gear"></i></div>
+                <span class="mx-2">My Dashboard</span>
+                <i class="fa-solid fa-chevron-right ms-auto"></i>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item py-2" href="{% url 'edit_profile' %}" style="color: white;">
+                <div class="dropdown-icon"><i class="fa-solid fa-user-pen"></i></div>
+                <span class="mx-2">Edit Profile</span>
+                <i class="fa-solid fa-chevron-right ms-auto"></i>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item py-2" href="{% url 'settings' %}" style="color: white;">
+                <div class="dropdown-icon"><i class="fa-solid fa-gear"></i></div>
+                <span class="mx-2">Settings</span>
+                <i class="fa-solid fa-chevron-right ms-auto"></i>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item py-2" href="{% url 'logout' %}" style="color: white;">
+                <div class="dropdown-icon"><i class="fas fa-right-from-bracket"></i></div>
+                <span class="mx-2">Logout</span>
+                <i class="fa-solid fa-chevron-right ms-auto"></i>
+              </a>
+            </li>
+          </ul>
+        </li>
+        
+      {% else %}
+        <!-- For not logged in users -->
+        <!-- On desktop (md and up), show both Sign Up and Login -->
+        <li class="nav-item d-none d-md-block">
+          <a href="{% url 'register' %}" type="button" class="btn ms-2 px-3 signup">Sign Up</a>
+        </li>
+        <li class="nav-item d-none d-md-block">
+          <a href="{% url 'login' %}" type="button" class="btn ms-2 px-4 login">Login</a>
+        </li>
+        <!-- On mobile (below md), show only the Sign Up button -->
+        <li class="nav-item d-md-none">
+          <a href="{% url 'register' %}" type="button" class="btn ms-2 px-3 signup">Sign Up</a>
+        </li>
+      {% endif %}
+    </ul>
+
+    <!-- Optionally, add a mobile menu toggle if needed -->
+    <span class="sm-nav-item d-md-none">
+      {% if '/tutorial/' in request.path and '/tutorial/' != request.path %}
+        <a class="nav-link mx-2">
+          <i class="fas fa-bars mx-2"></i>
+        </a>
+        <a class="nav-link mx-2">
+          <i class="fas fa-close mx-2"></i>
+        </a>
+      {% endif %}
+    </span>
+  </div>
+</nav>
+

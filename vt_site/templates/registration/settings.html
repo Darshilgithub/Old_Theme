@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - Settings{% endblock %}
+{% block body_content %}
+<div class="container">
+    <div class="row my-3 shadow rounded settings_box">
+        <div class="col-lg-3 settings_box_sidebar px-0">
+            <div class="pt-5">
+                <div class="mb-2">
+                    <h3 class="px-5">Account</h3>
+                    <a href="{% url 'view_profile' %}" class="nav-link px-4 py-2 d-flex align-items-center my-3 details">
+                        {% if user.pic %}
+                        <img src="{{user.pic.url}}"
+                            class="w-25 rounded-circle d-flex align-items-center justify-content-center"
+                            style="aspect-ratio: 1/1;">
+                        {% else %}
+                        <img src="{% static './images/icon-user.png' %}"
+                            class="w-25 rounded-circle d-flex align-items-center justify-content-center"
+                            style="aspect-ratio: 1/1;">
+                        {% endif %}
+                        <div class="mx-2 d-flex" style="flex-direction: column;">
+                            <i class="text-secondary">Profile</i>
+                            <h5>{{user.username }}</h5>
+                        </div>
+                        <div class="ms-auto me-4">
+                            <i class="fa-solid fa-chevron-right ms-auto"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <ul class="navbar-nav pb-3 w-100 mt-4 mx-auto">
+                    <h3 class="px-5">Settings</h3>
+                    <li class="nav-item py-2">
+                        <a class="py-2 nav-link" href="{% url 'account_info' %}">
+                            <i class="fas fa-user"></i>
+                            <span class="mx-4">Account info</span>
+                            <i class="fa-solid fa-chevron-right ms-auto d-inline d-lg-none"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item py-2">
+                        <a class="py-2 nav-link" href="{% url 'mobileChange' %}">
+                            <i class="fas fa-square-phone"></i>
+                            <span class="mx-4">Change Mobile</span>
+                            <i class="fa-solid fa-chevron-right ms-auto d-inline d-lg-none"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item py-2">
+                        <a class="py-2 nav-link" href="{% url 'emailChange' %}">
+                            <i class="fas fa-envelope"></i>
+                            <span class="mx-4">Change Email</span>
+                            <i class="fa-solid fa-chevron-right ms-auto d-inline d-lg-none"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item py-2">
+                        <a class="py-2 nav-link" href="{% url 'passChange' %}">
+                            <i class="fas fa-key"></i>
+                            <span style="padding: 0 1.5rem;">Reset Password</span>
+                            <i class="fa-solid fa-chevron-right ms-auto d-inline d-lg-none"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item py-2">
+                        <a class="py-2 nav-link" href="{% url 'support' %}">
+                            <i class="fas fa-headset"></i>
+                            <span class="mx-4">Help & support</span>
+                            <i class="fa-solid fa-chevron-right ms-auto d-inline d-lg-none"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-9 settings_box_content">
+            {% block content %} {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

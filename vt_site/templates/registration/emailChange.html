@@ -1,0 +1,89 @@
+{% extends 'registration/settings.html' %}
+{% load static %}
+{% block title %} - Email Change{% endblock %}
+{% block content %}
+<a href="{% url 'settings' %}" class="nav-link">
+    <i class="fa-solid fa-chevron-left mx-4 my-5 d-lg-none d-block"></i>
+</a>
+    <div class="my-0 my-lg-5 mx-5 pt-lg-3 pt-0 account_box">
+        <h2 class="mb-3">Change Email id</h2>
+        <p class="fs-6 text-white-50">"Effortlessly update your email id. Stay connected securely with this simple change. Your convenience matters!</p>
+        <form method="post" id="email_change_form">
+            {% csrf_token %}
+            <div class="my-5 w-md-50 w-100">
+                <label for="id_email" class="form-label">
+                    <i class="fas fa-envelope text-info me-2"></i>
+                    {{form.email.label}}
+                </label>
+                {{form.email}}
+            </div>
+
+		<button class="btn my-3" style="background-color: var(--icon-color); border: none; color: var(--text-color-black);">Update</button>
+            <p class="note"><b>Note : </b><i>Once delete the account then never get.</i></p>
+        </form>
+        {% if messages %}
+                    {% for message in messages %}
+                        <div id="message_toast" class="toast align-items-center {% if message.tags == 'error' %} text-bg-danger {% elif message.tags == 'success' %} text-bg-success {% else %} text-bg-secondary {% endif %} border-0 position-absolute" role="alert" aria-live="assertive" aria-atomic="true" style="top: 0%;left: 40%;transform: translate(-50%);">
+                            <div class="d-flex align-items-center">
+                                <div class="toast-body ">
+                                    <i class="bi {% if message.level == 'error' %} bi-exclamation-circle-fill {% elif message.tags == 'success' %} bi-check-circle-fill {% endif %} mx-2"></i>
+                                    <span>{{ message }}</span>
+                                </div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto bg-transparent" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+    </div>
+{% endblock %}
+
+{% block internal_script%}
+    <script>
+        const sidebar = document.querySelector('.settings_box_sidebar');
+        if ($(window).width() <= 991) {
+            console.log("hello")
+            sidebar.style.display = 'none';
+        }
+        const toast = document.getElementById('message_toast');
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toast);
+        $(document).ready(function(){
+            toastBootstrap.show()
+        })
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const email_input = document.getElementById("id_email");
+            let valid_form = true;
+    
+            email_input.addEventListener('input', function() {
+                let errorElement = email_input.nextSibling;
+                while (errorElement && errorElement.nodeType === 3) {
+                    errorElement = errorElement.nextSibling;
+                }
+                
+                if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email_input.value)) {
+                    email_input.classList.add('warning');
+                    if (!errorElement) {
+                        const errorMessage = '<h6 class="text-danger input-warning mt-2">Enter Valid email</h6>';
+                        email_input.insertAdjacentHTML('afterend', errorMessage);
+                    }
+                    valid_form = false;
+                } else {
+                    email_input.classList.remove('warning');
+                    if (errorElement) {
+                        errorElement.remove();
+                    }
+                    valid_form = true;
+                }
+            })
+    
+            document.getElementById('email_change_form').addEventListener('onsubmit', function(event) {
+                const fullPhoneNumber = iti.getNumber();
+                input.value = fullPhoneNumber;
+    
+                if (!valid_form) {
+                    event.preventDefault(); 
+                }
+            })
+        });    
+    </script>
+{% endblock %}
